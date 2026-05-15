@@ -1,4 +1,4 @@
-import { MessageCircle, Users, Zap } from 'lucide-react'
+import { MessageCircle, Users, Zap, Activity } from 'lucide-react'
 import { useMockStats } from '@/hooks/useMockStats'
 import { useContractStats } from '@/hooks/useContractStats'
 
@@ -10,74 +10,82 @@ export default function RightStatsPanel() {
     {
       icon: MessageCircle,
       value: totalMessages,
-      label: 'Messages posted',
-      color: 'var(--ritual-neon)',
+      label: 'Messages',
+      color: 'var(--coral)',
+      bg: 'var(--coral-dim)',
       isLoading,
     },
     {
       icon: Users,
       value: activeWallets,
-      label: 'Unique addresses',
-      color: 'var(--ritual-ice-blue)',
+      label: 'Wallets',
+      color: 'var(--lavender)',
+      bg: 'var(--lavender-dim)',
       isLoading,
     },
     {
       icon: Zap,
       value: tps,
-      label: 'Network TPS',
-      color: 'var(--ritual-violet)',
+      label: 'TPS',
+      color: 'var(--sunshine)',
+      bg: 'var(--sunshine-dim)',
       isLoading: false,
     },
   ]
 
   return (
-    <aside className="hidden xl:flex flex-col w-[320px] h-screen sticky top-0 glass border-l border-[var(--ritual-glass-border)] p-6 overflow-y-auto">
+    <aside className="hidden xl:flex flex-col w-[280px] h-screen sticky top-0 terminal-glass border-l border-[var(--terminal-border)] p-5 overflow-y-auto">
       {/* Header */}
       <div className="mb-6">
-        <h3
-          className="text-base font-medium"
-          style={{ color: 'var(--ritual-text-primary)' }}
-        >
-          Activity Overview
-        </h3>
-        <p className="caption-text mt-0.5">Real-time network statistics</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Activity size={16} className="text-[var(--coral)]" />
+          <h3 className="font-heading text-base font-bold text-[var(--text-primary)]">
+            Network Pulse
+          </h3>
+        </div>
+        <p className="caption-text">Real-time stats from Ritual</p>
       </div>
 
       {/* Stat Cards */}
-      <div className="flex flex-col gap-4 mb-6">
+      <div className="flex flex-col gap-3 mb-6">
         {statCards.map((stat) => (
           <div
             key={stat.label}
-            className="glass p-4"
-            style={{ borderLeft: '2px solid var(--ritual-neon)' }}
+            className="terminal-card grain-overlay p-4"
+            style={{ borderLeft: `3px solid ${stat.color}` }}
           >
-            <stat.icon size={18} style={{ color: stat.color }} className="mb-2" />
-            <div
-              className="text-2xl font-light"
-              style={{ color: 'var(--ritual-neon)' }}
-            >
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: stat.bg }}>
+                <stat.icon size={15} style={{ color: stat.color }} />
+              </div>
+              <p className="caption-text">{stat.label}</p>
+            </div>
+            <div className="font-heading text-2xl font-bold" style={{ color: stat.color }}>
               {stat.isLoading ? '...' : stat.value.toLocaleString()}
             </div>
-            <p className="caption-text mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
 
       {/* Network Status */}
-      <div
-        className="glass p-4"
-        style={{ borderLeft: '3px solid var(--ritual-success)' }}
-      >
+      <div className="terminal-card grain-overlay p-4" style={{ borderLeft: '3px solid var(--mint)' }}>
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
-          <span
-            className="text-sm"
-            style={{ color: 'var(--ritual-text-primary)' }}
-          >
-            Network Online
+          <div className="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse" />
+          <span className="text-sm font-medium text-[var(--text-primary)]">
+            Online
           </span>
         </div>
-        <p className="caption-text">Ritual Testnet — Chain ID: 1979</p>
+        <p className="caption-text">Ritual Testnet · Chain 1979</p>
+      </div>
+
+      {/* Fun decoration */}
+      <div className="mt-auto pt-6">
+        <div className="terminal-card grain-overlay p-4 text-center">
+          <p className="font-mono-label text-xs text-[var(--text-muted)] mb-2">Fun Fact</p>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            This feed lives on the blockchain forever. Your message is now immortal. 🧬
+          </p>
+        </div>
       </div>
     </aside>
   )

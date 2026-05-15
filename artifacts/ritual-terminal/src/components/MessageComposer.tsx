@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Loader2, Check } from 'lucide-react'
+import { Loader2, Check, Send, Wallet } from 'lucide-react'
 import { useRotatingPlaceholder } from '@/hooks/useRotatingPlaceholder'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { FEED_PLACEHOLDERS, MAX_MESSAGE_LENGTH } from '@/lib/constants'
@@ -26,7 +26,6 @@ export default function MessageComposer({
   const [showSuccess, setShowSuccess] = useState(false)
   const { postMessage, isPosting } = useAgentFeed()
   const { placeholder, isVisible } = useRotatingPlaceholder(FEED_PLACEHOLDERS, 4000)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const charCount = message.length
   const isOverLimit = charCount > MAX_MESSAGE_LENGTH
@@ -61,17 +60,25 @@ export default function MessageComposer({
   }, [canSubmit, walletConnected, walletAddress, connectWallet, message, postMessage, onSubmit, onToast])
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.5 }}
       id="compose"
-      className="glass p-5 md:p-6 relative glass-refraction mb-8"
-      style={{ border: '1px solid rgba(57,255,20,0.1)' }}
+      className="terminal-card grain-overlay p-5 md:p-6 relative mb-8"
+      style={{ border: '1px solid rgba(255,123,114,0.12)' }}
     >
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-medium" style={{ color: 'var(--ritual-text-primary)' }}>
-          New Message
-        </h3>
-        <span className={`caption-text ${isOverLimit ? 'text-red-400' : ''}`}>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center">
+            <Send size={13} className="text-[var(--coral)]" />
+          </div>
+          <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+            Compose
+          </h3>
+        </div>
+        <span className={`font-mono-label text-xs ${isOverLimit ? 'text-[var(--error)]' : 'text-[var(--text-muted)]'}`}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
@@ -86,30 +93,29 @@ export default function MessageComposer({
               animate={{ opacity: isVisible ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-3 left-3 pointer-events-none text-sm"
-              style={{ color: 'var(--ritual-text-tertiary)' }}
+              className="absolute top-3.5 left-4 pointer-events-none text-sm font-light"
+              style={{ color: 'var(--text-muted)' }}
             >
               {placeholder}
             </motion.div>
           )}
         </AnimatePresence>
         <textarea
-          ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full min-h-[100px] bg-transparent border rounded-md p-3 text-sm resize-vertical focus:outline-none"
+          className="w-full min-h-[100px] bg-[rgba(255,255,255,0.03)] border rounded-xl p-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200"
           style={{
-            color: 'var(--ritual-text-primary)',
-            borderColor: isOverLimit ? 'rgba(255,100,100,0.4)' : 'var(--ritual-glass-border)',
+            color: 'var(--text-primary)',
+            borderColor: isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)',
           }}
           onFocus={(e) => {
             if (!isOverLimit) {
-              e.currentTarget.style.borderColor = 'rgba(57,255,20,0.3)'
-              e.currentTarget.style.boxShadow = '0 0 12px rgba(57,255,20,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(255,123,114,0.3)'
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(255,123,114,0.06)'
             }
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = isOverLimit ? 'rgba(255,100,100,0.4)' : 'var(--ritual-glass-border)'
+            e.currentTarget.style.borderColor = isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'
             e.currentTarget.style.boxShadow = 'none'
           }}
         />
@@ -120,26 +126,27 @@ export default function MessageComposer({
         {!walletConnected ? (
           <button
             onClick={connectWallet}
-            className="btn-glass-primary text-sm py-2 px-5"
+            className="terminal-btn text-sm py-2 px-5 flex items-center gap-2"
           >
-            Connect Wallet to Post
+            <Wallet size={14} />
+            Connect to Post
           </button>
         ) : (
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="btn-glass-primary text-sm py-2 px-5 flex items-center gap-2"
+            className="terminal-btn text-sm py-2 px-5 flex items-center gap-2"
           >
             {isPosting ? (
-              <><Loader2 size={14} className="animate-spin-slow" /> Sending...</>
+              <><Loader2 size={14} className="animate-spin" /> Sending...</>
             ) : showSuccess ? (
               <><Check size={14} /> Sent!</>
             ) : (
-              'Post Message'
+              <><Send size={14} /> Post Message</>
             )}
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }

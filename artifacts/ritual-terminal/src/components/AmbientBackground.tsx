@@ -1,72 +1,171 @@
+import { useEffect, useRef } from 'react'
+
+function PixelParticles() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animId: number
+    const particles: Array<{
+      x: number
+      y: number
+      size: number
+      speedX: number
+      speedY: number
+      color: string
+      opacity: number
+      life: number
+      maxLife: number
+    }> = []
+
+    const colors = [
+      'rgba(255,123,114,',
+      'rgba(210,180,255,',
+      'rgba(126,231,135,',
+      'rgba(255,209,102,',
+    ]
+
+    function resize() {
+      if (!canvas) return
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    function spawnParticle() {
+      if (particles.length > 60) return
+      const colorBase = colors[Math.floor(Math.random() * colors.length)]
+      particles.push({
+        x: Math.random() * (canvas?.width || 0),
+        y: Math.random() * (canvas?.height || 0),
+        size: Math.random() * 3 + 1,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        color: colorBase,
+        opacity: 0,
+        life: 0,
+        maxLife: 200 + Math.random() * 300,
+      })
+    }
+
+    function animate() {
+      if (!ctx || !canvas) return
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      if (Math.random() < 0.05) spawnParticle()
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i]
+        p.life++
+        p.x += p.speedX
+        p.y += p.speedY
+
+        const lifeRatio = p.life / p.maxLife
+        if (lifeRatio < 0.1) {
+          p.opacity = lifeRatio / 0.1
+        } else if (lifeRatio > 0.8) {
+          p.opacity = (1 - lifeRatio) / 0.2
+        } else {
+          p.opacity = 1
+        }
+
+        ctx.fillStyle = p.color + (p.opacity * 0.6) + ')'
+        ctx.fillRect(p.x, p.y, p.size, p.size)
+
+        if (p.life >= p.maxLife) {
+          particles.splice(i, 1)
+        }
+      }
+
+      animId = requestAnimationFrame(animate)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+    animate()
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      cancelAnimationFrame(animId)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-0 pointer-events-none"
+      style={{ opacity: 0.8 }}
+    />
+  )
+}
+
 export default function AmbientBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Base gradient */}
+      {/* Base warm dark */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, #0A0A0F 0%, #0A1A0F 40%, #0A0F0A 70%, #0A0A0F 100%)',
+          background: 'linear-gradient(180deg, #141428 0%, #1a1a2e 50%, #141428 100%)',
         }}
       />
 
-      {/* Ambient light at top - neon green */}
+      {/* Dot grid pattern */}
       <div
-        className="absolute top-0 left-0 right-0 h-[60vh]"
+        className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(57,255,20,0.15) 0%, transparent 60%)',
+          backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
         }}
       />
 
-      {/* Bottom ambient - subtle green */}
+      {/* Warm ambient glow top */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[50vh]"
+        style={{
+          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,123,114,0.08) 0%, transparent 60%)',
+        }}
+      />
+
+      {/* Lavender ambient glow bottom */}
       <div
         className="absolute bottom-0 left-0 right-0 h-[40vh]"
         style={{
-          background: 'radial-gradient(ellipse 60% 40% at 50% 100%, rgba(34,197,94,0.06) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 60% 40% at 50% 100%, rgba(210,180,255,0.06) 0%, transparent 60%)',
         }}
       />
 
-      {/* Floating orb 1 - neon green */}
+      {/* Floating pixel particles */}
+      <PixelParticles />
+
+      {/* Subtle scanlines */}
       <div
-        className="absolute w-[400px] h-[400px] rounded-full animate-orb-float-1"
+        className="absolute inset-0 opacity-[0.015]"
         style={{
-          top: '10%',
-          left: '60%',
-          background: 'radial-gradient(circle, rgba(57,255,20,0.2) 0%, transparent 70%)',
-          filter: 'blur(100px)',
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
         }}
       />
 
-      {/* Floating orb 2 - emerald green */}
-      <div
-        className="absolute w-[350px] h-[350px] rounded-full animate-orb-float-2"
-        style={{
-          top: '50%',
-          left: '10%',
-          background: 'radial-gradient(circle, rgba(34,197,94,0.18) 0%, transparent 70%)',
-          filter: 'blur(100px)',
-        }}
-      />
-
-      {/* Floating orb 3 - light green */}
-      <div
-        className="absolute w-[300px] h-[300px] rounded-full animate-orb-float-3"
-        style={{
-          top: '70%',
-          right: '15%',
-          background: 'radial-gradient(circle, rgba(134,239,172,0.12) 0%, transparent 70%)',
-          filter: 'blur(100px)',
-        }}
-      />
-
-      {/* Noise texture overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '256px 256px',
-        }}
-      />
+      {/* Corner decorations */}
+      <div className="absolute top-6 left-6 w-16 h-16 opacity-20">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[var(--coral)] to-transparent" />
+        <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-[var(--coral)] to-transparent" />
+      </div>
+      <div className="absolute top-6 right-6 w-16 h-16 opacity-20">
+        <div className="absolute top-0 right-0 w-full h-[1px] bg-gradient-to-l from-[var(--lavender)] to-transparent" />
+        <div className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-[var(--lavender)] to-transparent" />
+      </div>
+      <div className="absolute bottom-6 left-6 w-16 h-16 opacity-20">
+        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-[var(--mint)] to-transparent" />
+        <div className="absolute bottom-0 left-0 w-[1px] h-full bg-gradient-to-t from-[var(--mint)] to-transparent" />
+      </div>
+      <div className="absolute bottom-6 right-6 w-16 h-16 opacity-20">
+        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-[var(--sunshine)] to-transparent" />
+        <div className="absolute bottom-0 right-0 w-[1px] h-full bg-gradient-to-t from-[var(--sunshine)] to-transparent" />
+      </div>
     </div>
   )
 }

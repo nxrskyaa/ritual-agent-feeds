@@ -1,5 +1,6 @@
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
+import { Wallet, LogOut, Zap } from 'lucide-react'
 
 interface WalletCardProps {
   className?: string
@@ -10,15 +11,16 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
 
   if (!isConnected || !address) {
     return (
-      <div className={`glass p-4 ${className}`}>
+      <div className={`terminal-card grain-overlay p-5 ${className}`}>
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-2 h-2 rounded-full bg-[var(--ritual-text-tertiary)]" />
-          <p className="caption-text">Not connected</p>
+          <div className="w-2 h-2 rounded-full bg-[var(--text-muted)]" />
+          <p className="caption-text">Offline</p>
         </div>
-        <p className="text-xs mb-3" style={{ color: 'var(--ritual-text-secondary)' }}>
-          Connect your wallet to post messages onchain
+        <p className="text-sm mb-4 text-[var(--text-secondary)]">
+          Connect your wallet to drop messages onchain
         </p>
-        <button onClick={connect} className="btn-glass-primary w-full text-sm">
+        <button onClick={connect} className="terminal-btn w-full text-sm py-2.5">
+          <Wallet size={15} />
           Connect Wallet
         </button>
       </div>
@@ -26,10 +28,10 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
   }
 
   return (
-    <div className={`glass p-4 ${className}`}>
+    <div className={`terminal-card grain-overlay p-5 ${className}`}>
       <div className="flex items-center gap-3 mb-3">
         <div
-          className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold"
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold"
           style={{
             background: getAddressGradient(address),
             color: '#fff',
@@ -38,19 +40,19 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
           {address.slice(2, 4).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="mono-label text-xs truncate">{truncateAddress(address)}</p>
+          <p className="font-mono-label text-xs truncate">{truncateAddress(address)}</p>
         </div>
-        <div className="w-1.5 h-1.5 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
+        <div className="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse" />
       </div>
-      <p className="caption-text flex items-center gap-1.5 mb-3">
-        <span className="w-1 h-1 rounded-full bg-[var(--ritual-success)]" />
-        Ritual Testnet
-      </p>
+      <div className="flex items-center gap-1.5 mb-4">
+        <Zap size={12} className="text-[var(--sunshine)]" />
+        <p className="caption-text text-[var(--mint)]">Ritual Testnet</p>
+      </div>
       <button
         onClick={disconnect}
-        className="btn-glass-ghost w-full text-xs py-1.5"
-        style={{ color: 'var(--ritual-text-tertiary)' }}
+        className="terminal-btn-ghost w-full text-xs py-2 flex items-center justify-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--coral)]"
       >
+        <LogOut size={13} />
         Disconnect
       </button>
     </div>
@@ -63,19 +65,20 @@ export function ConnectButton({ className = '' }: { className?: string }) {
 
   if (isConnected && address) {
     return (
-      <div className={`flex items-center gap-2 glass rounded-full px-3 py-1.5 ${className}`}>
+      <div className={`flex items-center gap-2 terminal-glass rounded-full px-3 py-1.5 ${className}`}>
         <div
-          className="w-5 h-5 rounded-full"
+          className="w-5 h-5 rounded-lg"
           style={{ background: getAddressGradient(address) }}
         />
-        <span className="mono-label text-[0.65rem]">{truncateAddress(address)}</span>
-        <div className="w-1.5 h-1.5 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
+        <span className="font-mono-label text-[0.65rem] text-[var(--text-secondary)]">{truncateAddress(address)}</span>
+        <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
       </div>
     )
   }
 
   return (
-    <button onClick={connect} className={`btn-glass-primary text-xs py-1.5 px-3 ${className}`}>
+    <button onClick={connect} className={`terminal-btn text-xs py-1.5 px-3 ${className}`}>
+      <Wallet size={13} />
       Connect
     </button>
   )

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Edit2, Check, ExternalLink, MessageCircle } from 'lucide-react'
+import { X, Edit2, Check, ExternalLink, MessageCircle, Hash } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress, timeAgo, getExplorerUrl } from '@/lib/utils'
 import { RITUAL_CHAIN_CONFIG } from '@/lib/constants'
@@ -63,21 +63,18 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3 }}
-            className="glass-strong relative w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col"
+            transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            className="terminal-card grain-overlay relative w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col"
+            style={{ border: '1px solid rgba(255,123,114,0.15)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Top line */}
-            <div
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(57,255,20,0.4), transparent)' }}
-            />
+            {/* Top gradient line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--coral)] via-[var(--lavender)] to-[var(--mint)]" />
 
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 rounded-full transition-colors hover:bg-[var(--ritual-glass-hover)] z-10"
-              style={{ color: 'var(--ritual-text-tertiary)' }}
+              className="absolute top-4 right-4 p-1.5 rounded-full transition-colors hover:bg-white/5 z-10 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               <X size={18} />
             </button>
@@ -87,11 +84,11 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               {/* Avatar */}
               <div className="flex justify-center mb-4">
                 <div
-                  className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold"
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold"
                   style={{
                     background: getAddressGradient(address),
                     color: '#fff',
-                    boxShadow: '0 0 30px rgba(57,255,20,0.15)',
+                    boxShadow: '0 8px 30px rgba(255,123,114,0.15)',
                   }}
                 >
                   {(profile?.name?.[0] || address[2]).toUpperCase()}
@@ -107,11 +104,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                     onChange={(e) => setEditName(e.target.value)}
                     placeholder="Your display name..."
                     autoFocus
-                    className="w-full glass bg-transparent border rounded-md p-2.5 text-sm"
-                    style={{
-                      color: 'var(--ritual-text-primary)',
-                      borderColor: 'var(--ritual-glass-border)',
-                    }}
+                    className="w-full bg-[rgba(255,255,255,0.03)] border rounded-xl p-3 text-sm text-[var(--text-primary)] border-[var(--terminal-border)] focus:border-[var(--coral)] focus:outline-none transition-colors"
                     maxLength={20}
                     onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                   />
@@ -120,38 +113,33 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                     value={editBio}
                     onChange={(e) => setEditBio(e.target.value)}
                     placeholder="Short bio (optional)..."
-                    className="w-full glass bg-transparent border rounded-md p-2.5 text-sm"
-                    style={{
-                      color: 'var(--ritual-text-primary)',
-                      borderColor: 'var(--ritual-glass-border)',
-                    }}
+                    className="w-full bg-[rgba(255,255,255,0.03)] border rounded-xl p-3 text-sm text-[var(--text-primary)] border-[var(--terminal-border)] focus:border-[var(--coral)] focus:outline-none transition-colors"
                     maxLength={60}
                     onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                   />
                   <div className="flex gap-2">
-                    <button onClick={handleSave} className="btn-glass-primary text-xs py-1.5 px-4 flex items-center gap-1">
+                    <button onClick={handleSave} className="terminal-btn text-xs py-2 px-4 flex items-center gap-1">
                       <Check size={12} /> Save
                     </button>
-                    <button onClick={() => setIsEditing(false)} className="btn-glass-ghost text-xs py-1.5 px-4">
+                    <button onClick={() => setIsEditing(false)} className="terminal-btn-ghost text-xs py-2 px-4">
                       Cancel
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="text-center mb-4 relative">
-                  <h2 className="text-xl font-medium" style={{ color: 'var(--ritual-text-primary)' }}>
+                  <h2 className="font-heading text-xl font-bold text-[var(--text-primary)]">
                     {displayName}
                   </h2>
                   {profile?.bio && (
-                    <p className="text-sm mt-1" style={{ color: 'var(--ritual-text-secondary)' }}>
+                    <p className="text-sm mt-1 text-[var(--text-secondary)]">
                       {profile.bio}
                     </p>
                   )}
-                  <p className="mono-label text-xs mt-1">{truncateAddress(address)}</p>
+                  <p className="font-mono-label text-xs mt-1 text-[var(--text-muted)]">{truncateAddress(address)}</p>
                   <button
                     onClick={startEdit}
-                    className="absolute -right-1 top-0 p-1.5 rounded-full transition-colors hover:bg-[var(--ritual-glass-hover)]"
-                    style={{ color: 'var(--ritual-text-tertiary)' }}
+                    className="absolute -right-1 top-0 p-1.5 rounded-full transition-colors hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--coral)]"
                     title="Edit profile"
                   >
                     <Edit2 size={14} />
@@ -163,12 +151,21 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               <div className="flex justify-center gap-8 mb-6">
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1">
-                    <MessageCircle size={14} style={{ color: 'var(--ritual-neon)' }} />
-                    <span className="text-lg font-light" style={{ color: 'var(--ritual-text-primary)' }}>
+                    <MessageCircle size={14} className="text-[var(--coral)]" />
+                    <span className="font-heading text-lg font-bold text-[var(--text-primary)]">
                       {userEntries.length}
                     </span>
                   </div>
                   <p className="caption-text">Posts</p>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-1">
+                    <Hash size={14} className="text-[var(--lavender)]" />
+                    <span className="font-heading text-lg font-bold text-[var(--text-primary)]">
+                      #{address.slice(2, 6).toUpperCase()}
+                    </span>
+                  </div>
+                  <p className="caption-text">ID</p>
                 </div>
               </div>
 
@@ -178,7 +175,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                   href={getExplorerUrl(RITUAL_CHAIN_CONFIG.blockExplorers?.default.url, `/address/${address}`)!}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-glass-secondary w-full text-xs flex items-center justify-center gap-2 mb-6"
+                  className="terminal-btn-mint w-full text-xs flex items-center justify-center gap-2 mb-6"
                 >
                   <ExternalLink size={12} />
                   View on Ritual Explorer
@@ -186,26 +183,26 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               )}
 
               {/* Divider */}
-              <div className="h-px w-full mb-4" style={{ background: 'var(--ritual-glass-border)' }} />
+              <div className="h-px w-full mb-4 bg-gradient-to-r from-transparent via-[var(--terminal-border)] to-transparent" />
 
               {/* Posts list */}
-              <h3 className="text-sm font-medium mb-3" style={{ color: 'var(--ritual-text-secondary)' }}>
+              <h3 className="font-heading text-sm font-semibold mb-3 text-[var(--text-secondary)]">
                 Posts ({userEntries.length})
               </h3>
 
               {userEntries.length === 0 ? (
-                <p className="text-sm text-center py-4" style={{ color: 'var(--ritual-text-tertiary)' }}>
-                  No posts yet
+                <p className="text-sm text-center py-4 text-[var(--text-muted)]">
+                  No posts yet — time to make some noise!
                 </p>
               ) : (
                 <div className="space-y-3">
                   {userEntries.map((entry) => (
                     <div
                       key={entry.id}
-                      className="glass p-3 rounded-lg"
-                      style={{ borderLeft: '2px solid var(--ritual-neon)' }}
+                      className="terminal-card grain-overlay p-3"
+                      style={{ borderLeft: '3px solid var(--coral)' }}
                     >
-                      <p className="text-sm" style={{ color: 'var(--ritual-text-primary)' }}>
+                      <p className="text-sm text-[var(--text-primary)]">
                         {entry.message}
                       </p>
                       <span className="caption-text mt-2 block">{timeAgo(entry.timestamp)}</span>

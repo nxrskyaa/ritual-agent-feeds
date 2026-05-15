@@ -5,7 +5,7 @@ interface GlassCardProps {
   children: React.ReactNode
   className?: string
   hoverable?: boolean
-  refractive?: boolean
+  color?: 'coral' | 'mint' | 'lavender' | 'sunshine' | 'default'
   onClick?: () => void
 }
 
@@ -13,7 +13,7 @@ export default function GlassCard({
   children,
   className = '',
   hoverable = true,
-  refractive = false,
+  color = 'default',
   onClick,
 }: GlassCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -27,15 +27,22 @@ export default function GlassCard({
     cardRef.current.style.setProperty('--mouse-y', `${y}%`)
   }, [])
 
+  const glowColors = {
+    coral: 'rgba(255,123,114,0.12)',
+    mint: 'rgba(126,231,135,0.12)',
+    lavender: 'rgba(210,180,255,0.12)',
+    sunshine: 'rgba(255,209,102,0.12)',
+    default: 'rgba(255,123,114,0.08)',
+  }
+
   return (
     <div
       ref={cardRef}
       onMouseMove={hoverable ? handleMouseMove : undefined}
       onClick={onClick}
       className={cn(
-        'glass relative overflow-hidden',
-        hoverable && 'glass-hover glass-active',
-        refractive && 'glass-refraction',
+        'terminal-card grain-overlay relative overflow-hidden',
+        hoverable && 'cursor-pointer',
         className
       )}
       style={
@@ -51,7 +58,7 @@ export default function GlassCard({
         <div
           className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300"
           style={{
-            background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(57,255,20,0.08) 0%, transparent 60%)',
+            background: `radial-gradient(circle at var(--mouse-x) var(--mouse-y), ${glowColors[color]} 0%, transparent 60%)`,
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLElement).style.opacity = '1'

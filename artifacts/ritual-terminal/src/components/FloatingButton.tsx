@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Info } from 'lucide-react'
+import { Heart } from 'lucide-react'
 
 interface FloatingButtonProps {
   onClick: () => void
@@ -14,21 +14,21 @@ export default function FloatingButton({ onClick }: FloatingButtonProps) {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className="fixed bottom-20 right-4 md:right-8 z-50 w-12 h-12 rounded-full flex items-center justify-center"
+      className="fixed bottom-20 right-4 md:right-8 z-50 w-12 h-12 rounded-2xl flex items-center justify-center"
       style={{
-        background: 'linear-gradient(135deg, rgba(57,255,20,0.2), rgba(34,197,94,0.15))',
-        border: '1px solid rgba(57,255,20,0.35)',
-        boxShadow: '0 4px 20px rgba(57,255,20,0.15), 0 0 30px rgba(57,255,20,0.08)',
+        background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.15))',
+        border: '1.5px solid rgba(255,123,114,0.35)',
+        boxShadow: '0 4px 20px rgba(255,123,114,0.15), 0 0 30px rgba(210,180,255,0.08)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
       }}
     >
-      <Info size={20} style={{ color: 'var(--ritual-neon)' }} />
+      <Heart size={20} className="text-[var(--coral)]" />
       {/* Pulse ring */}
       <div
-        className="absolute inset-0 rounded-full animate-ping"
+        className="absolute inset-0 rounded-2xl animate-ping"
         style={{
-          background: 'rgba(57,255,20,0.1)',
+          background: 'rgba(255,123,114,0.1)',
           animationDuration: '2s',
         }}
       />

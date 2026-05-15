@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ExternalLink, CheckCircle, Loader2 } from 'lucide-react'
+import { ExternalLink, CheckCircle, Loader2, Bot, User } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress, timeAgo, getExplorerUrl } from '@/lib/utils'
 import { RITUAL_CHAIN_CONFIG } from '@/lib/constants'
@@ -23,22 +23,26 @@ export default function FeedEntry({
 
   const statusIcon =
     entry.status === 'confirmed' ? (
-      <CheckCircle size={14} className="text-[var(--ritual-success)]" />
+      <CheckCircle size={13} className="text-[var(--mint)]" />
     ) : entry.status === 'pending' ? (
-      <Loader2 size={14} className="text-[var(--ritual-pending)] animate-spin-slow" />
+      <Loader2 size={13} className="text-[var(--sunshine)] animate-spin" />
     ) : null
+
+  const TypeIcon = entry.type === 'agent' ? Bot : User
+  const typeColor = entry.type === 'agent' ? 'var(--lavender)' : 'var(--text-tertiary)'
+  const typeBg = entry.type === 'agent' ? 'var(--lavender-dim)' : 'rgba(255,255,255,0.04)'
 
   return (
     <motion.div
       initial={isNew ? { opacity: 0, y: -20, scale: 0.97 } : false}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="glass p-5 md:p-6 relative"
+      transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+      className="terminal-card grain-overlay p-5 md:p-6 relative"
       style={
         isNew
           ? {
-              borderLeft: '3px solid var(--ritual-neon)',
-              boxShadow: '0 0 20px rgba(57,255,20,0.08)',
+              borderLeft: '3px solid var(--coral)',
+              boxShadow: '0 0 30px rgba(255,123,114,0.08)',
             }
           : undefined
       }
@@ -48,7 +52,7 @@ export default function FeedEntry({
         {/* Avatar */}
         <button
           onClick={() => onViewProfile?.(entry.address)}
-          className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-xs font-semibold transition-transform hover:scale-110"
+          className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold transition-transform hover:scale-110 hover:rotate-3"
           style={{
             background: getAddressGradient(entry.address),
             color: '#fff',
@@ -61,29 +65,26 @@ export default function FeedEntry({
         <div className="flex-1 min-w-0">
           <button
             onClick={() => onViewProfile?.(entry.address)}
-            className="text-sm font-medium block transition-colors hover:text-[var(--ritual-neon)]"
-            style={{ color: 'var(--ritual-text-primary)' }}
+            className="text-sm font-semibold block transition-colors hover:text-[var(--coral)] font-heading"
           >
             {displayName}
           </button>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="mono-label text-[0.7rem]">{truncateAddress(entry.address)}</span>
+            <span className="font-mono-label text-[0.7rem] text-[var(--text-tertiary)]">{truncateAddress(entry.address)}</span>
+            <span className="text-[var(--text-muted)]">·</span>
             <span className="caption-text">{timeAgo(entry.timestamp, now)}</span>
           </div>
         </div>
 
         {/* Type badge */}
         <div
-          className="glass rounded-full px-2.5 py-0.5 flex items-center gap-1.5 shrink-0"
-          style={{ border: '1px solid rgba(57,255,20,0.1)' }}
+          className="rounded-lg px-2.5 py-1 flex items-center gap-1.5 shrink-0"
+          style={{ background: typeBg, border: `1px solid ${typeColor}20` }}
         >
-          <div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{
-              background: entry.type === 'agent' ? 'var(--ritual-neon)' : 'var(--ritual-silver)',
-            }}
-          />
-          <span className="caption-text text-[0.65rem]">{entry.type === 'agent' ? 'Agent' : 'User'}</span>
+          <TypeIcon size={12} style={{ color: typeColor }} />
+          <span className="font-mono-label text-[0.65rem]" style={{ color: typeColor }}>
+            {entry.type === 'agent' ? 'Agent' : 'Human'}
+          </span>
         </div>
 
         {/* Status */}
@@ -95,8 +96,7 @@ export default function FeedEntry({
             href={getExplorerUrl(RITUAL_CHAIN_CONFIG.blockExplorers?.default.url, `/address/${entry.address}`)!}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 transition-colors hover:text-[var(--ritual-neon)]"
-            style={{ color: 'var(--ritual-text-tertiary)' }}
+            className="shrink-0 transition-colors hover:text-[var(--coral)] text-[var(--text-muted)]"
             title="View on Ritual Explorer"
             onClick={(e) => e.stopPropagation()}
           >
@@ -106,13 +106,9 @@ export default function FeedEntry({
       </div>
 
       {/* Message */}
-      <p
-        className="text-sm leading-relaxed mt-4 break-words"
-        style={{ color: 'var(--ritual-text-primary)' }}
-      >
+      <p className="text-sm leading-relaxed mt-4 break-words text-[var(--text-primary)]">
         {entry.message}
       </p>
-
     </motion.div>
   )
 }

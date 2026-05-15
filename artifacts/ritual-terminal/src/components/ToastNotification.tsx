@@ -9,9 +9,15 @@ interface ToastNotificationProps {
 
 export default function ToastNotification({ toasts, onRemove }: ToastNotificationProps) {
   const iconMap = {
-    success: <CheckCircle size={18} className="text-[var(--ritual-success)]" />,
-    error: <XCircle size={18} className="text-red-400" />,
-    info: <Info size={18} className="text-[var(--ritual-neon)]" />,
+    success: <CheckCircle size={18} className="text-[var(--mint)]" />,
+    error: <XCircle size={18} className="text-[var(--error)]" />,
+    info: <Info size={18} className="text-[var(--sunshine)]" />,
+  }
+
+  const borderMap = {
+    success: 'var(--mint)',
+    error: 'var(--error)',
+    info: 'var(--sunshine)',
   }
 
   return (
@@ -20,16 +26,16 @@ export default function ToastNotification({ toasts, onRemove }: ToastNotificatio
         {toasts.map((toast) => (
           <motion.div
             key={toast.id}
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.3 }}
-            className="glass p-4 flex items-start gap-3"
-            style={{ borderLeft: '2px solid var(--ritual-neon)' }}
+            initial={{ opacity: 0, x: 40, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            className="terminal-card grain-overlay p-4 flex items-start gap-3"
+            style={{ borderLeft: `3px solid ${borderMap[toast.type]}` }}
           >
             {iconMap[toast.type]}
             <div className="flex-1 min-w-0">
-              <p className="text-sm" style={{ color: 'var(--ritual-text-primary)' }}>
+              <p className="text-sm text-[var(--text-primary)]">
                 {toast.message}
               </p>
               {toast.txHash && (
@@ -37,8 +43,7 @@ export default function ToastNotification({ toasts, onRemove }: ToastNotificatio
                   href={`https://explorer.ritualfoundation.org/tx/${toast.txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs flex items-center gap-1 mt-1 hover:underline"
-                  style={{ color: 'var(--ritual-neon)' }}
+                  className="text-xs flex items-center gap-1 mt-1 hover:underline text-[var(--coral)]"
                 >
                   View on Explorer <ExternalLink size={10} />
                 </a>
@@ -46,8 +51,7 @@ export default function ToastNotification({ toasts, onRemove }: ToastNotificatio
             </div>
             <button
               onClick={() => onRemove(toast.id)}
-              className="shrink-0 transition-colors hover:text-[var(--ritual-text-primary)]"
-              style={{ color: 'var(--ritual-text-tertiary)' }}
+              className="shrink-0 transition-colors hover:text-[var(--text-primary)] text-[var(--text-muted)]"
             >
               <X size={14} />
             </button>

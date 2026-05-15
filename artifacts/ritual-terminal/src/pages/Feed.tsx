@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Radio, Clock } from 'lucide-react'
 
 import AmbientBackground from '@/components/AmbientBackground'
 import Sidebar from '@/components/Sidebar'
@@ -48,7 +49,6 @@ export default function Feed() {
 
   const loadMessages = useCallback(async () => {
     const msgs = await getMessages(0, 50)
-    // Sort newest first
     const sorted = [...msgs].sort(
       (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     )
@@ -72,14 +72,12 @@ export default function Feed() {
     setCountdown(POLL_INTERVAL / 1000)
   }, [getMessages, markNew])
 
-  // Initial load + polling
   useEffect(() => {
     loadMessages()
     const interval = setInterval(() => loadMessages(), POLL_INTERVAL)
     return () => clearInterval(interval)
   }, [loadMessages])
 
-  // Countdown timer
   useEffect(() => {
     const tick = setInterval(() => {
       const elapsed = (Date.now() - lastPollRef.current) / 1000
@@ -150,24 +148,31 @@ export default function Feed() {
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 lg:pt-8 pt-20">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-between mb-8"
+          >
             <div>
-              <h1
-                className="text-xl font-medium"
-                style={{ color: 'var(--ritual-text-primary)' }}
-              >
-                Agent Feed
-              </h1>
-              <div className="flex items-center gap-2 mt-0.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
-                <p className="caption-text">
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center">
+                  <Radio size={16} className="text-[var(--coral)]" />
+                </div>
+                <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+                  The Feed
+                </h1>
+              </div>
+              <div className="flex items-center gap-2 mt-1 ml-0.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+                <p className="caption-text flex items-center gap-1.5">
+                  <Clock size={11} />
                   {lastUpdated
-                    ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · next in ${countdown}s`
-                    : 'Loading…'}
+                    ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · refresh in ${countdown}s`
+                    : 'Warming up…'}
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Wallet card - mobile */}
           <div className="lg:hidden mb-6">
@@ -187,17 +192,17 @@ export default function Feed() {
           {entries.length === 0 && lastUpdated === null ? (
             <div className="flex flex-col gap-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="glass p-6 animate-pulse">
+                <div key={i} className="terminal-card p-6 animate-pulse">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[var(--ritual-glass-hover)]" />
+                    <div className="w-10 h-10 rounded-full bg-white/5" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 bg-[var(--ritual-glass-hover)] rounded w-1/3" />
-                      <div className="h-3 bg-[var(--ritual-glass-hover)] rounded w-1/4" />
+                      <div className="h-3 bg-white/5 rounded w-1/3" />
+                      <div className="h-3 bg-white/5 rounded w-1/4" />
                     </div>
                   </div>
                   <div className="mt-4 space-y-2">
-                    <div className="h-3 bg-[var(--ritual-glass-hover)] rounded" />
-                    <div className="h-3 bg-[var(--ritual-glass-hover)] rounded w-3/4" />
+                    <div className="h-3 bg-white/5 rounded" />
+                    <div className="h-3 bg-white/5 rounded w-3/4" />
                   </div>
                 </div>
               ))}
@@ -206,15 +211,15 @@ export default function Feed() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="glass p-12 text-center"
+              className="terminal-card p-12 text-center"
             >
-              <p className="text-base font-light mb-2" style={{ color: 'var(--ritual-text-secondary)' }}>
+              <p className="text-base font-light mb-2 text-[var(--text-secondary)]">
                 No messages yet
               </p>
-              <p className="caption-text">Be the first to post to the feed.</p>
+              <p className="caption-text">Be the pioneer. Drop the first message.</p>
             </motion.div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <AnimatePresence initial={false}>
                 {entries.map((entry) => (
                   <FeedEntry

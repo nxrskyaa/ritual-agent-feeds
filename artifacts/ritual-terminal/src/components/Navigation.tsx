@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Loader2, Settings } from 'lucide-react'
+import { Menu, X, Loader2, Sparkles } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
-import SettingsModal from './SettingsModal'
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [settingsOpen, setSettingsOpen] = useState(false)
   const location = useLocation()
   const { address, isConnected, connect, disconnect, isConnecting } = useWalletAddress()
 
@@ -30,29 +28,27 @@ export default function Navigation() {
 
   return (
     <>
-      <nav
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 transition-all duration-300 ${
-          scrolled ? 'glass-nav' : 'bg-transparent'
+          scrolled ? 'terminal-nav' : 'bg-transparent'
         }`}
       >
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src="/images/logo.png"
-            alt="Logo"
-            className="w-8 h-8 object-contain animate-pulse-glow rounded"
-            style={{ filter: 'drop-shadow(0 0 8px rgba(57,255,20,0.4))' }}
-          />
-          <span
-            className="text-sm font-semibold tracking-[0.04em]"
-            style={{ color: 'var(--ritual-text-primary)' }}
-          >
-            Ritual Agent Feeds
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--coral)] to-[var(--lavender)] opacity-20 group-hover:opacity-30 transition-opacity" />
+            <Sparkles size={18} className="relative text-[var(--coral)] group-hover:rotate-12 transition-transform duration-300" />
+          </div>
+          <span className="font-heading text-sm font-semibold tracking-tight text-[var(--text-primary)]">
+            Ritual Feeds
           </span>
         </Link>
 
         {/* Center nav links - desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) =>
             link.external ? (
               <a
@@ -60,8 +56,7 @@ export default function Navigation() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative text-sm font-normal transition-colors duration-250 hover:text-[var(--ritual-neon)]"
-                style={{ color: 'var(--ritual-text-secondary)' }}
+                className="px-4 py-2 rounded-full text-sm font-normal text-[var(--text-secondary)] hover:text-[var(--coral)] hover:bg-[var(--coral-dim)] transition-all duration-200"
               >
                 {link.label}
               </a>
@@ -69,8 +64,11 @@ export default function Navigation() {
               <Link
                 key={link.label}
                 to={link.href}
-                className="relative text-sm font-normal transition-colors duration-250 hover:text-[var(--ritual-neon)]"
-                style={{ color: 'var(--ritual-text-secondary)' }}
+                className={`px-4 py-2 rounded-full text-sm font-normal transition-all duration-200 ${
+                  location.pathname === link.href
+                    ? 'text-[var(--coral)] bg-[var(--coral-dim)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--coral)] hover:bg-[var(--coral-dim)]'
+                }`}
               >
                 {link.label}
               </Link>
@@ -82,76 +80,72 @@ export default function Navigation() {
         <div className="flex items-center gap-3">
           {isConnected && address ? (
             <div className="hidden md:flex items-center gap-2">
-              <div
-                className="glass rounded-full px-3 py-1.5 flex items-center gap-2"
-                style={{ border: '1px solid rgba(57,255,20,0.15)' }}
-              >
+              <div className="terminal-glass rounded-full px-3 py-1.5 flex items-center gap-2">
                 <div
-                  className="w-5 h-5 rounded-full shrink-0"
+                  className="w-4 h-4 rounded-full shrink-0 ring-2 ring-white/10"
                   style={{ background: getAddressGradient(address) }}
                 />
-                <span className="mono-label text-[0.65rem]">{truncateAddress(address)}</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
+                <span className="font-mono-label text-[0.7rem] text-[var(--text-secondary)]">{truncateAddress(address)}</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
               </div>
               <button
                 onClick={disconnect}
-                className="btn-glass-ghost text-xs py-2 px-3"
-                style={{ color: 'var(--ritual-text-tertiary)' }}
+                className="text-xs text-[var(--text-tertiary)] hover:text-[var(--coral)] transition-colors px-2 py-1"
               >
-                Disconnect
+                Exit
               </button>
             </div>
           ) : (
             <button
               onClick={connect}
               disabled={isConnecting}
-              className="hidden md:flex btn-glass-primary text-sm py-2 px-4 items-center gap-2"
+              className="hidden md:flex terminal-btn text-sm py-2 px-4 items-center gap-2"
             >
               {isConnecting ? (
                 <>
-                  <Loader2 size={14} className="animate-spin-slow" />
+                  <Loader2 size={14} className="animate-spin" />
                   Connecting...
                 </>
               ) : (
-                'Connect Wallet'
+                <>
+                  <Sparkles size={14} />
+                  Connect
+                </>
               )}
             </button>
           )}
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
             {mobileOpen ? (
-              <X size={20} style={{ color: 'var(--ritual-text-primary)' }} />
+              <X size={20} className="text-[var(--text-primary)]" />
             ) : (
-              <Menu size={20} style={{ color: 'var(--ritual-text-primary)' }} />
+              <Menu size={20} className="text-[var(--text-primary)]" />
             )}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 glass-strong flex flex-col items-center justify-center gap-8 md:hidden"
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(24px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-[var(--terminal-bg)]/90 flex flex-col items-center justify-center gap-6 md:hidden"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/images/logo.png"
-                alt="Logo"
-                className="w-10 h-10 object-contain"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(57,255,20,0.5))' }}
-              />
-              <span className="text-lg font-semibold" style={{ color: 'var(--ritual-text-primary)' }}>
-                Ritual Agent Feeds
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20">
+                <Sparkles size={20} className="text-[var(--coral)]" />
+              </div>
+              <span className="font-heading text-xl font-semibold text-[var(--text-primary)]">
+                Ritual Feeds
               </span>
             </div>
 
@@ -162,12 +156,12 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col items-center gap-3 mb-4"
               >
-                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
+                <div className="flex items-center gap-2 terminal-glass rounded-full px-4 py-2">
                   <div className="w-5 h-5 rounded-full" style={{ background: getAddressGradient(address) }} />
-                  <span className="mono-label text-sm">{truncateAddress(address)}</span>
-                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--ritual-success)] animate-pulse-glow" />
+                  <span className="font-mono-label text-sm text-[var(--text-secondary)]">{truncateAddress(address)}</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
                 </div>
-                <button onClick={disconnect} className="btn-glass-ghost text-sm">
+                <button onClick={disconnect} className="terminal-btn-ghost text-sm">
                   Disconnect
                 </button>
               </motion.div>
@@ -177,15 +171,18 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 onClick={connect}
                 disabled={isConnecting}
-                className="btn-glass-primary mb-4 flex items-center gap-2"
+                className="terminal-btn mb-4 flex items-center gap-2"
               >
                 {isConnecting ? (
                   <>
-                    <Loader2 size={14} className="animate-spin-slow" />
+                    <Loader2 size={14} className="animate-spin" />
                     Connecting...
                   </>
                 ) : (
-                  'Connect Wallet'
+                  <>
+                    <Sparkles size={14} />
+                    Connect Wallet
+                  </>
                 )}
               </motion.button>
             )}
@@ -200,8 +197,7 @@ export default function Navigation() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.3 }}
-                  className="text-2xl font-light"
-                  style={{ color: 'var(--ritual-text-primary)' }}
+                  className="font-heading text-2xl font-light text-[var(--text-primary)] hover:text-[var(--coral)] transition-colors"
                 >
                   {link.label}
                 </motion.a>
@@ -212,34 +208,15 @@ export default function Navigation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.3 }}
                 >
-                  <Link to={link.href} className="text-2xl font-light" style={{ color: 'var(--ritual-text-primary)' }}>
+                  <Link to={link.href} className="font-heading text-2xl font-light text-[var(--text-primary)] hover:text-[var(--coral)] transition-colors">
                     {link.label}
                   </Link>
                 </motion.div>
               )
             )}
-
-            {/* Settings link */}
-            <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.32, duration: 0.3 }}
-              onClick={() => {
-                setMobileOpen(false)
-                setSettingsOpen(true)
-              }}
-              className="text-2xl font-light flex items-center gap-3"
-              style={{ color: 'var(--ritual-text-secondary)' }}
-            >
-              <Settings size={20} />
-              Settings
-            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Settings Modal */}
-      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   )
 }
