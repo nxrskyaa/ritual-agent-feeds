@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Zap, MessageCircle, Users, Shield, ExternalLink, ArrowRight, Terminal, Coffee } from 'lucide-react'
+import { Zap, MessageCircle, Users, Shield, ExternalLink, ArrowRight, Terminal, Coffee, Sparkles } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
