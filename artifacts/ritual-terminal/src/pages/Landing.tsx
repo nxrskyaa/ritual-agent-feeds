@@ -14,11 +14,13 @@ import { useContractStats } from '@/hooks/useContractStats'
 import { useMockStats } from '@/hooks/useMockStats'
 
 function ScrambleText({ text, className = '', delay = 0 }: { text: string; className?: string; delay?: number }) {
-  const [display, setDisplay] = useState('')
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
+  const [display, setDisplay] = useState(text)
+  const [started, setStarted] = useState(false)
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   
   useEffect(() => {
     const timeout = setTimeout(() => {
+      setStarted(true)
       let iteration = 0
       const interval = setInterval(() => {
         setDisplay(
@@ -31,7 +33,7 @@ function ScrambleText({ text, className = '', delay = 0 }: { text: string; class
             })
             .join('')
         )
-        iteration += 1 / 2
+        iteration += 0.5
         if (iteration >= text.length) {
           clearInterval(interval)
           setDisplay(text)
@@ -42,15 +44,17 @@ function ScrambleText({ text, className = '', delay = 0 }: { text: string; class
     return () => clearTimeout(timeout)
   }, [text, delay])
 
-  return <span className={className}>{display || text.split('').map(() => ' ').join('')}</span>
+  return <span className={className}>{started ? display : text}</span>
 }
 
 function TypewriterText({ text, className = '', delay = 0, speed = 50 }: { text: string; className?: string; delay?: number; speed?: number }) {
   const [display, setDisplay] = useState('')
   const [showCursor, setShowCursor] = useState(true)
+  const [started, setStarted] = useState(false)
   
   useEffect(() => {
     const timeout = setTimeout(() => {
+      setStarted(true)
       let i = 0
       const interval = setInterval(() => {
         setDisplay(text.slice(0, i))
@@ -67,8 +71,8 @@ function TypewriterText({ text, className = '', delay = 0, speed = 50 }: { text:
 
   return (
     <span className={className}>
-      {display}
-      {showCursor && <span className="animate-blink text-[var(--coral)]">_</span>}
+      {started ? display : ''}
+      {showCursor && started && <span className="animate-blink text-[var(--coral)]">_</span>}
     </span>
   )
 }
@@ -84,29 +88,14 @@ function FloatingCard({ children, delay = 0, x = 0, y = 0, rotate = 0, floatDura
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.9 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-      }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.8, delay, ease: [0.34, 1.56, 0.64, 1] }}
-      className="absolute pointer-events-auto"
-      style={{ 
-        x, 
-        y, 
-        rotateZ: rotate,
-      }}
+      className="absolute"
+      style={{ left: x, top: y, rotate: `${rotate}deg` }}
     >
       <motion.div
-        animate={{ 
-          y: [0, -10, 0, 8, 0],
-          rotateZ: [rotate, rotate - 1, rotate, rotate + 1, rotate],
-        }}
-        transition={{ 
-          duration: floatDuration, 
-          repeat: Infinity, 
-          ease: 'easeInOut',
-        }}
+        animate={{ y: [0, -10, 0, 8, 0] }}
+        transition={{ duration: floatDuration, repeat: Infinity, ease: 'easeInOut' }}
       >
         {children}
       </motion.div>
@@ -124,11 +113,10 @@ function TerminalMockup() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, rotateY: -15, x: 50 }}
-      animate={{ opacity: 1, rotateY: 0, x: 0 }}
-      transition={{ duration: 1, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
       className="terminal-card p-5 w-full max-w-md"
-      style={{ transformStyle: 'preserve-3d' }}
     >
       {/* Window chrome */}
       <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/5">
@@ -256,7 +244,7 @@ export default function Landing() {
       {/* Hero */}
       <motion.section
         style={{ opacity: heroOpacity, y: heroY }}
-        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-16 overflow-hidden"
+        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-16"
       >
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -329,12 +317,12 @@ export default function Landing() {
             </div>
 
             {/* Right: Terminal Mockup + Floating Cards */}
-            <div className="relative hidden lg:block perspective-1000" style={{ minHeight: 500 }}>
-              <div className="preserve-3d relative" style={{ transform: 'rotateY(-5deg) rotateX(3deg)' }}>
+            <div className="relative hidden lg:block" style={{ minHeight: 500 }}>
+              <div className="relative">
                 <TerminalMockup />
                 
                 {/* Floating cards around terminal */}
-                <FloatingCard delay={2} x={-80} y={-40} rotate={-8} floatDuration={5}>
+                <FloatingCard delay={2} x={-60} y={-30} rotate={-8} floatDuration={5}>
                   <div className="terminal-card p-3 w-36">
                     <div className="flex items-center gap-2 mb-1">
                       <Radio size={12} className="text-[var(--coral)]" />
@@ -351,7 +339,7 @@ export default function Landing() {
                   </div>
                 </FloatingCard>
 
-                <FloatingCard delay={2.3} x={260} y={20} rotate={10} floatDuration={7}>
+                <FloatingCard delay={2.3} x={320} y={10} rotate={10} floatDuration={7}>
                   <div className="terminal-card p-3 w-32">
                     <div className="flex items-center gap-2 mb-1">
                       <Sparkles size={12} className="text-[var(--sunshine)]" />
@@ -367,7 +355,7 @@ export default function Landing() {
                   </div>
                 </FloatingCard>
 
-                <FloatingCard delay={2.6} x={-60} y={220} rotate={5} floatDuration={6}>
+                <FloatingCard delay={2.6} x={-40} y={260} rotate={5} floatDuration={6}>
                   <div className="terminal-card p-3 w-28">
                     <div className="flex items-center gap-2 mb-1">
                       <MousePointerClick size={12} className="text-[var(--mint)]" />
@@ -377,7 +365,7 @@ export default function Landing() {
                   </div>
                 </FloatingCard>
 
-                <FloatingCard delay={2.9} x={240} y={180} rotate={-6} floatDuration={5.5}>
+                <FloatingCard delay={2.9} x={300} y={220} rotate={-6} floatDuration={5.5}>
                   <div className="terminal-card p-3 w-24">
                     <div className="caption-text mb-1">Gas</div>
                     <div className="font-heading text-sm font-bold text-[var(--mint)]">0.001</div>
@@ -406,7 +394,7 @@ export default function Landing() {
         </motion.div>
       </motion.section>
 
-      {/* Features — Horizontal Scroll */}
+      {/* Features */}
       <section id="features" className="relative z-10 py-32 px-4">
         <div className="max-w-6xl mx-auto">
           <ScrollReveal>
@@ -464,7 +452,7 @@ export default function Landing() {
       <section className="relative z-10 py-32 px-4">
         <div className="max-w-3xl mx-auto">
           <ScrollReveal>
-            <GlassCard className="p-12 md:p-16 text-center relative overflow-visible" color="coral">
+            <GlassCard className="p-12 md:p-16 text-center relative" color="coral">
               {/* Decorative rings */}
               <div className="absolute -top-6 -left-6 w-12 h-12 rounded-full border border-[var(--coral)]/20 animate-ping" style={{ animationDuration: '3s' }} />
               <div className="absolute -bottom-4 -right-4 w-8 h-8 rounded-full bg-[var(--lavender)]/10 animate-ping" style={{ animationDuration: '4s' }} />

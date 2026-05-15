@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface GlassCardProps {
@@ -17,15 +17,16 @@ export default function GlassCard({
   onClick,
 }: GlassCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const [isHovered, setIsHovered] = useState(false)
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!cardRef.current) return
+    if (!cardRef.current || !hoverable) return
     const rect = cardRef.current.getBoundingClientRect()
     const x = ((e.clientX - rect.left) / rect.width) * 100
     const y = ((e.clientY - rect.top) / rect.height) * 100
     cardRef.current.style.setProperty('--mouse-x', `${x}%`)
     cardRef.current.style.setProperty('--mouse-y', `${y}%`)
-  }, [])
+  }, [hoverable])
 
   const glowColors = {
     coral: 'rgba(255,123,114,0.15)',
@@ -46,60 +47,51 @@ export default function GlassCard({
   return (
     <div
       ref={cardRef}
-      onMouseMove={hoverable ? handleMouseMove : undefined}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
       className={cn(
-        'relative overflow-hidden rounded-2xl transition-all duration-500',
+        'relative rounded-2xl transition-all duration-500',
         hoverable && 'cursor-pointer',
         className
       )}
-      style={
-        hoverable
-          ? {
-              '--mouse-x': '50%',
-              '--mouse-y': '50%',
-            } as React.CSSProperties
-          : undefined
-      }
+      style={{
+        '--mouse-x': '50%',
+        '--mouse-y': '50%',
+      } as React.CSSProperties}
     >
-      {/* Animated gradient border */}
-      <div 
-        className="absolute -inset-[1px] rounded-2xl opacity-0 transition-opacity duration-500"
-        style={{
-          background: `linear-gradient(90deg, ${borderColors[color]}, ${borderColors[color === 'coral' ? 'lavender' : color === 'mint' ? 'sunshine' : 'coral']}, ${borderColors[color]})`,
-          backgroundSize: '200% 100%',
-          animation: 'border-flow 3s linear infinite',
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.opacity = '0.6'
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.opacity = '0'
-        }}
-      />
-      
-      {/* Glass background */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] backdrop-blur-xl" />
-      
-      {/* Spotlight glow */}
+      {/* Background layer */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.04] to-white/[0.01]" />
+
+      {/* Animated gradient border - only visible on hover */}
       {hoverable && (
         <div
-          className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"
+          className="absolute -inset-[1px] rounded-2xl transition-opacity duration-500 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at var(--mouse-x) var(--mouse-y), ${glowColors[color]} 0%, transparent 60%)`,
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.opacity = '1'
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.opacity = '0'
+            opacity: isHovered ? 0.5 : 0,
+            background: `linear-gradient(90deg, ${borderColors[color]}, ${borderColors[color === 'coral' ? 'lavender' : color === 'mint' ? 'sunshine' : 'coral']}, ${borderColors[color]})`,
+            backgroundSize: '200% 100%',
+            animation: isHovered ? 'border-flow 3s linear infinite' : 'none',
           }}
         />
       )}
-      
+
+      {/* Spotlight glow - only visible on hover */}
+      {hoverable && (
+        <div
+          className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            background: `radial-gradient(circle at var(--mouse-x) var(--mouse-y), ${glowColors[color]} 0%, transparent 60%)`,
+          }}
+        />
+      )}
+
       {/* Top highlight line */}
-      <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      
+      <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+
+      {/* Content */}
       <div className="relative z-10">{children}</div>
     </div>
   )
