@@ -51,10 +51,14 @@
     --error: #ff7b72;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--terminal-bg);
     color: var(--text-primary);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -91,30 +95,11 @@
       0 8px 32px rgba(0,0,0,0.15),
       inset 0 1px 0 rgba(255,255,255,0.04);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-  }
-  
-  .terminal-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255,123,114,0.15), rgba(210,180,255,0.1), rgba(126,231,135,0.08));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-  
-  .terminal-card:hover::before {
-    opacity: 1;
   }
   
   .terminal-card:hover {
     transform: translateY(-3px) scale(1.01);
+    border-color: rgba(255,123,114,0.2);
     box-shadow: 
       0 4px 20px rgba(0,0,0,0.3),
       0 16px 48px rgba(0,0,0,0.2),
@@ -128,16 +113,12 @@
 
   .terminal-glass {
     background: rgba(255,255,255,0.02);
-    backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 1rem;
   }
 
   .terminal-nav {
-    background: rgba(8,8,16,0.8);
-    backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    background: rgba(8,8,16,0.85);
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
 
@@ -156,26 +137,13 @@
     justify-content: center;
     gap: 0.5rem;
     position: relative;
-    overflow: hidden;
-  }
-  
-  .terminal-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.15));
-    opacity: 0;
-    transition: opacity 0.3s ease;
   }
   
   .terminal-btn:hover {
     border-color: rgba(255,123,114,0.5);
     transform: translateY(-2px);
     box-shadow: 0 4px 24px rgba(255,123,114,0.12), 0 0 48px rgba(210,180,255,0.06);
-  }
-  
-  .terminal-btn:hover::after {
-    opacity: 1;
+    background: linear-gradient(135deg, rgba(255,123,114,0.18), rgba(210,180,255,0.12));
   }
   
   .terminal-btn:active {
@@ -292,10 +260,5 @@
   @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
-  }
-  
-  @keyframes border-flow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
   }
 }
