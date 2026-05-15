@@ -65,7 +65,7 @@ export default function MessageComposer({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.5 }}
       id="compose"
-      className="terminal-card p-5 md:p-6 relative mb-8"
+      className="card p-5 md:p-6 mb-8"
       style={{ border: '1px solid rgba(255,123,114,0.12)' }}
     >
       {/* Top bar */}
@@ -78,7 +78,7 @@ export default function MessageComposer({
             Compose
           </h3>
         </div>
-        <span className={`font-mono-label text-xs ${isOverLimit ? 'text-[var(--error)]' : 'text-[var(--text-muted)]'}`}>
+        <span className={`label text-xs ${isOverLimit ? 'text-[var(--error)]' : 'text-[var(--text-muted)]'}`}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
@@ -127,7 +127,7 @@ export default function MessageComposer({
         {!walletConnected ? (
           <button
             onClick={connectWallet}
-            className="terminal-btn text-sm py-2 px-5 flex items-center gap-2"
+            className="btn-primary text-sm py-2 px-5 flex items-center gap-2"
           >
             <Wallet size={14} />
             Connect to Post
@@ -136,7 +136,7 @@ export default function MessageComposer({
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="terminal-btn text-sm py-2 px-5 flex items-center gap-2"
+            className="btn-primary text-sm py-2 px-5 flex items-center gap-2"
           >
             {isPosting ? (
               <><Loader2 size={14} className="animate-spin" /> Sending...</>

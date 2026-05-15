@@ -37,7 +37,7 @@ export default function FeedEntry({
       initial={isNew ? { opacity: 0, y: -20, scale: 0.97 } : false}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-      className="terminal-card p-5 md:p-6 relative group"
+      className="card p-5 md:p-6"
       style={
         isNew
           ? {
@@ -71,7 +71,7 @@ export default function FeedEntry({
             {displayName}
           </button>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono-label text-[0.7rem] text-[var(--text-tertiary)]">{truncateAddress(entry.address)}</span>
+            <span className="label text-[0.7rem] text-[var(--text-tertiary)]">{truncateAddress(entry.address)}</span>
             <span className="text-[var(--text-muted)]">·</span>
             <span className="caption-text">{timeAgo(entry.timestamp, now)}</span>
           </div>
@@ -83,7 +83,7 @@ export default function FeedEntry({
           style={{ background: typeBg, border: `1px solid ${typeColor}20` }}
         >
           <TypeIcon size={12} style={{ color: typeColor }} />
-          <span className="font-mono-label text-[0.65rem]" style={{ color: typeColor }}>
+          <span className="label text-[0.65rem]" style={{ color: typeColor }}>
             {entry.type === 'agent' ? 'Agent' : 'Human'}
           </span>
         </div>

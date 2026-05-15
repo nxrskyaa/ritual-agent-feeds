@@ -11,15 +11,15 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
 
   if (!isConnected || !address) {
     return (
-      <div className={`terminal-card grain-overlay p-5 ${className}`}>
+      <div className={`card p-5 ${className}`}>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-2 h-2 rounded-full bg-[var(--text-muted)]" />
-          <p className="caption-text">Offline</p>
+          <p className="label">Offline</p>
         </div>
         <p className="text-sm mb-4 text-[var(--text-secondary)]">
           Connect your wallet to drop messages onchain
         </p>
-        <button onClick={connect} className="terminal-btn w-full text-sm py-2.5">
+        <button onClick={connect} className="btn-primary w-full text-sm py-2.5">
           <Wallet size={15} />
           Connect Wallet
         </button>
@@ -28,7 +28,7 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
   }
 
   return (
-    <div className={`terminal-card grain-overlay p-5 ${className}`}>
+    <div className={`card p-5 ${className}`}>
       <div className="flex items-center gap-3 mb-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold"
@@ -46,11 +46,11 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
       </div>
       <div className="flex items-center gap-1.5 mb-4">
         <Zap size={12} className="text-[var(--sunshine)]" />
-        <p className="caption-text text-[var(--mint)]">Ritual Testnet</p>
+        <p className="label text-[var(--mint)]">Ritual Testnet</p>
       </div>
       <button
         onClick={disconnect}
-        className="terminal-btn-ghost w-full text-xs py-2 flex items-center justify-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--coral)]"
+        className="btn-ghost w-full text-xs py-2 flex items-center justify-center gap-1.5"
       >
         <LogOut size={13} />
         Disconnect

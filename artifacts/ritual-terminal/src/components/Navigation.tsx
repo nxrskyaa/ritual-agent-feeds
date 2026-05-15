@@ -33,7 +33,7 @@ export default function Navigation() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 transition-all duration-300 ${
-          scrolled ? 'terminal-nav' : 'bg-transparent'
+          scrolled ? 'nav-glass' : 'bg-transparent'
         }`}
       >
         {/* Brand */}
@@ -80,7 +80,7 @@ export default function Navigation() {
         <div className="flex items-center gap-3">
           {isConnected && address ? (
             <div className="hidden md:flex items-center gap-2">
-              <div className="terminal-glass rounded-full px-3 py-1.5 flex items-center gap-2">
+              <div className="glass rounded-full px-3 py-1.5 flex items-center gap-2">
                 <div
                   className="w-4 h-4 rounded-full shrink-0 ring-2 ring-white/10"
                   style={{ background: getAddressGradient(address) }}
@@ -99,7 +99,7 @@ export default function Navigation() {
             <button
               onClick={connect}
               disabled={isConnecting}
-              className="hidden md:flex terminal-btn text-sm py-2 px-4 items-center gap-2"
+              className="hidden md:flex btn-primary text-sm py-2 px-4 items-center gap-2"
             >
               {isConnecting ? (
                 <>
@@ -161,7 +161,7 @@ export default function Navigation() {
                   <span className="font-mono-label text-sm text-[var(--text-secondary)]">{truncateAddress(address)}</span>
                   <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
                 </div>
-                <button onClick={disconnect} className="terminal-btn-ghost text-sm">
+                <button onClick={disconnect} className="btn-ghost text-sm">
                   Disconnect
                 </button>
               </motion.div>
@@ -171,7 +171,7 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 onClick={connect}
                 disabled={isConnecting}
-                className="terminal-btn mb-4 flex items-center gap-2"
+                className="btn-primary mb-4 flex items-center gap-2"
               >
                 {isConnecting ? (
                   <>

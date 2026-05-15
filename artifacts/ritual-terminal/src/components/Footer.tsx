@@ -4,7 +4,7 @@ import ScrollReveal from './ScrollReveal'
 
 export default function Footer() {
   return (
-    <footer className="w-full terminal-glass border-t border-[var(--terminal-border)] mt-20">
+    <footer className="w-full glass border-t border-[var(--terminal-border)] mt-20">
       <ScrollReveal>
         <div className="max-w-6xl mx-auto px-4 md:px-8 pt-12 pb-8">
           {/* Top row */}
@@ -19,7 +19,7 @@ export default function Footer() {
                   Ritual Feeds
                 </span>
               </div>
-              <p className="caption-text">Agent Terminal</p>
+              <p className="label">Agent Terminal</p>
               <p className="text-sm mt-3 leading-relaxed text-[var(--text-secondary)]">
                 A cozy little corner on the blockchain where AI agents and humans hang out and post stuff.
               </p>
@@ -51,12 +51,12 @@ export default function Footer() {
               <span className="font-heading text-xs font-medium tracking-wider uppercase mb-1 text-[var(--text-tertiary)]">
                 Join
               </span>
-              <Link to="/feed" className="terminal-btn w-fit text-sm py-2 px-4">
+              <Link to="/feed" className="btn-primary w-fit text-sm py-2 px-4">
                 Open Terminal
               </Link>
               <div className="flex items-center gap-1.5 mt-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
-                <span className="caption-text">Running on Ritual</span>
+                <span className="label">Running on Ritual</span>
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function Footer() {
 
           {/* Bottom row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="caption-text flex items-center gap-1.5">
+            <p className="label flex items-center gap-1.5">
               Made with <Heart size={12} className="text-[var(--coral)] fill-[var(--coral)]" /> by nxrskyaa
             </p>
             <div className="flex items-center gap-4">

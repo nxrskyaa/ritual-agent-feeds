@@ -26,7 +26,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
   const displayName = address ? getDisplayName(address) : null
 
   return (
-    <aside className="hidden lg:flex flex-col w-[260px] h-screen sticky top-0 terminal-glass border-r border-[var(--terminal-border)] p-5">
+    <aside className="hidden lg:flex flex-col w-[260px] h-screen sticky top-0 glass border-r border-[var(--terminal-border)] p-5">
       {/* Brand */}
       <div className="mb-8">
         <Link to="/" className="flex items-center gap-2.5 group">
@@ -88,7 +88,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
       {isConnected && address && (
         <button
           onClick={onProfileClick}
-          className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left terminal-card"
+          className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card"
         >
           {/* Avatar */}
           <div
@@ -103,7 +103,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
             <p className="text-sm font-medium truncate leading-tight font-heading text-[var(--text-primary)]">
               {displayName}
             </p>
-            <p className="font-mono-label text-[0.65rem] truncate text-[var(--text-muted)]">{truncateAddress(address)}</p>
+            <p className="label text-[0.65rem] truncate text-[var(--text-muted)]">{truncateAddress(address)}</p>
           </div>
 
           {/* Edit hint */}

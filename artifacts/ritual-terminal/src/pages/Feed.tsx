@@ -168,7 +168,7 @@ export default function Feed() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--mint)] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--mint)]" />
                 </span>
-                <p className="caption-text flex items-center gap-1.5">
+                <p className="label flex items-center gap-1.5">
                   <Clock size={11} />
                   {lastUpdated
                     ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · refresh in ${countdown}s`
@@ -196,7 +196,7 @@ export default function Feed() {
           {entries.length === 0 && lastUpdated === null ? (
             <div className="flex flex-col gap-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="terminal-card p-6 animate-pulse">
+                <div key={i} className="card p-6 animate-pulse">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-full bg-white/5" />
                     <div className="flex-1 space-y-2">
@@ -215,12 +215,12 @@ export default function Feed() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="terminal-card p-12 text-center"
+              className="card p-12 text-center"
             >
               <p className="text-base font-light mb-2 text-[var(--text-secondary)]">
                 No messages yet
               </p>
-              <p className="caption-text">Be the pioneer. Drop the first message.</p>
+              <p className="label">Be the pioneer. Drop the first message.</p>
             </motion.div>
           ) : (
             <div className="flex flex-col gap-3">
