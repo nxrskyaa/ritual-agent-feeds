@@ -1,7 +1,57 @@
 import { useEffect, useRef } from 'react'
 
-function PixelParticles() {
+function FloatingShapes() {
+  return (
+    <>
+      <div
+        className="absolute w-[600px] h-[600px] rounded-full"
+        style={{
+          top: '-10%',
+          left: '-10%',
+          background: 'radial-gradient(circle, rgba(255,123,114,0.12) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'float-slow 20s ease-in-out infinite',
+        }}
+      />
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full"
+        style={{
+          top: '40%',
+          right: '-15%',
+          background: 'radial-gradient(circle, rgba(210,180,255,0.1) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'float-slow 25s ease-in-out infinite reverse',
+        }}
+      />
+      <div
+        className="absolute w-[400px] h-[400px] rounded-full"
+        style={{
+          bottom: '-5%',
+          left: '30%',
+          background: 'radial-gradient(circle, rgba(126,231,135,0.08) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'float-slow 18s ease-in-out infinite',
+          animationDelay: '-5s',
+        }}
+      />
+      <div
+        className="absolute w-[350px] h-[350px] rounded-full"
+        style={{
+          top: '20%',
+          left: '50%',
+          background: 'radial-gradient(circle, rgba(255,209,102,0.06) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+          animation: 'float-slow 22s ease-in-out infinite reverse',
+          animationDelay: '-8s',
+        }}
+      />
+    </>
+  )
+}
+
+function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouseRef = useRef({ x: -1000, y: -1000 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -13,20 +63,23 @@ function PixelParticles() {
     const particles: Array<{
       x: number
       y: number
-      size: number
-      speedX: number
-      speedY: number
+      vx: number
+      vy: number
+      radius: number
       color: string
-      opacity: number
-      life: number
-      maxLife: number
+      alpha: number
+      pulse: number
+      pulseSpeed: number
+      originalX: number
+      originalY: number
     }> = []
 
     const colors = [
-      'rgba(255,123,114,',
-      'rgba(210,180,255,',
-      'rgba(126,231,135,',
-      'rgba(255,209,102,',
+      '255,123,114',
+      '210,180,255',
+      '126,231,135',
+      '255,209,102',
+      '255,255,255',
     ]
 
     function resize() {
@@ -35,60 +88,121 @@ function PixelParticles() {
       canvas.height = window.innerHeight
     }
 
-    function spawnParticle() {
-      if (particles.length > 60) return
-      const colorBase = colors[Math.floor(Math.random() * colors.length)]
-      particles.push({
-        x: Math.random() * (canvas?.width || 0),
-        y: Math.random() * (canvas?.height || 0),
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
-        color: colorBase,
-        opacity: 0,
-        life: 0,
-        maxLife: 200 + Math.random() * 300,
-      })
+    function initParticles() {
+      particles.length = 0
+      const count = Math.min(60, Math.floor((canvas?.width || 1000) * (canvas?.height || 800) / 20000))
+      for (let i = 0; i < count; i++) {
+        const x = Math.random() * (canvas?.width || 1000)
+        const y = Math.random() * (canvas?.height || 800)
+        particles.push({
+          x,
+          y,
+          originalX: x,
+          originalY: y,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          radius: Math.random() * 2 + 0.5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: Math.random() * 0.5 + 0.2,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: Math.random() * 0.02 + 0.01,
+        })
+      }
+    }
+
+    function drawConnections() {
+      if (!ctx || particles.length < 2) return
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 120) {
+            const alpha = (1 - dist / 120) * 0.06
+            ctx.beginPath()
+            ctx.strokeStyle = `rgba(${particles[i].color},${alpha})`
+            ctx.lineWidth = 0.5
+            ctx.moveTo(particles[i].x, particles[i].y)
+            ctx.lineTo(particles[j].x, particles[j].y)
+            ctx.stroke()
+          }
+        }
+      }
     }
 
     function animate() {
       if (!ctx || !canvas) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      if (Math.random() < 0.05) spawnParticle()
+      const mouse = mouseRef.current
 
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i]
-        p.life++
-        p.x += p.speedX
-        p.y += p.speedY
-
-        const lifeRatio = p.life / p.maxLife
-        if (lifeRatio < 0.1) {
-          p.opacity = lifeRatio / 0.1
-        } else if (lifeRatio > 0.8) {
-          p.opacity = (1 - lifeRatio) / 0.2
-        } else {
-          p.opacity = 1
+      particles.forEach((p) => {
+        // Mouse repel effect
+        const dx = p.x - mouse.x
+        const dy = p.y - mouse.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < 150 && dist > 0) {
+          const force = (150 - dist) / 150 * 0.5
+          p.vx += (dx / dist) * force
+          p.vy += (dy / dist) * force
         }
 
-        ctx.fillStyle = p.color + (p.opacity * 0.6) + ')'
-        ctx.fillRect(p.x, p.y, p.size, p.size)
+        // Return to original position slowly
+        const homeDx = p.originalX - p.x
+        const homeDy = p.originalY - p.y
+        p.vx += homeDx * 0.001
+        p.vy += homeDy * 0.001
 
-        if (p.life >= p.maxLife) {
-          particles.splice(i, 1)
-        }
-      }
+        // Damping
+        p.vx *= 0.98
+        p.vy *= 0.98
 
+        p.x += p.vx
+        p.y += p.vy
+        p.pulse += p.pulseSpeed
+
+        const pulseAlpha = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse))
+        const pulseRadius = p.radius * (0.8 + 0.2 * Math.sin(p.pulse))
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, pulseRadius, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${p.color},${pulseAlpha})`
+        ctx.fill()
+
+        // Glow
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, pulseRadius * 3, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${p.color},${pulseAlpha * 0.12})`
+        ctx.fill()
+      })
+
+      drawConnections()
       animId = requestAnimationFrame(animate)
     }
 
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY }
+    }
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 }
+    }
+
     resize()
-    window.addEventListener('resize', resize)
+    initParticles()
     animate()
+
+    window.addEventListener('resize', () => {
+      resize()
+      initParticles()
+    })
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseleave', handleMouseLeave)
 
     return () => {
       window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseleave', handleMouseLeave)
       cancelAnimationFrame(animId)
     }
   }, [])
@@ -97,7 +211,6 @@ function PixelParticles() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ opacity: 0.8 }}
     />
   )
 }
@@ -105,67 +218,51 @@ function PixelParticles() {
 export default function AmbientBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Base warm dark */}
+      {/* Deep base */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(180deg, #141428 0%, #1a1a2e 50%, #141428 100%)',
+          background: 'linear-gradient(135deg, #080810 0%, #0c0c20 30%, #0a0a1a 60%, #080810 100%)',
         }}
       />
 
-      {/* Dot grid pattern */}
+      {/* Animated gradient mesh */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 opacity-40"
         style={{
-          backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)`,
-          backgroundSize: '32px 32px',
+          background: `
+            radial-gradient(ellipse at 20% 30%, rgba(255,123,114,0.12) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(210,180,255,0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(126,231,135,0.06) 0%, transparent 50%)
+          `,
         }}
       />
 
-      {/* Warm ambient glow top */}
+      {/* Floating blurred orbs */}
+      <FloatingShapes />
+
+      {/* Particle network */}
+      <ParticleField />
+
+      {/* Grid pattern */}
       <div
-        className="absolute top-0 left-0 right-0 h-[50vh]"
+        className="absolute inset-0 opacity-[0.02]"
         style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,123,114,0.08) 0%, transparent 60%)',
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
         }}
       />
 
-      {/* Lavender ambient glow bottom */}
+      {/* Heavy grain */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[40vh]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
-          background: 'radial-gradient(ellipse 60% 40% at 50% 100%, rgba(210,180,255,0.06) 0%, transparent 60%)',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
       />
-
-      {/* Floating pixel particles */}
-      <PixelParticles />
-
-      {/* Subtle scanlines */}
-      <div
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
-        }}
-      />
-
-      {/* Corner decorations */}
-      <div className="absolute top-6 left-6 w-16 h-16 opacity-20">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[var(--coral)] to-transparent" />
-        <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-[var(--coral)] to-transparent" />
-      </div>
-      <div className="absolute top-6 right-6 w-16 h-16 opacity-20">
-        <div className="absolute top-0 right-0 w-full h-[1px] bg-gradient-to-l from-[var(--lavender)] to-transparent" />
-        <div className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-[var(--lavender)] to-transparent" />
-      </div>
-      <div className="absolute bottom-6 left-6 w-16 h-16 opacity-20">
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-[var(--mint)] to-transparent" />
-        <div className="absolute bottom-0 left-0 w-[1px] h-full bg-gradient-to-t from-[var(--mint)] to-transparent" />
-      </div>
-      <div className="absolute bottom-6 right-6 w-16 h-16 opacity-20">
-        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-[var(--sunshine)] to-transparent" />
-        <div className="absolute bottom-0 right-0 w-[1px] h-full bg-gradient-to-t from-[var(--sunshine)] to-transparent" />
-      </div>
     </div>
   )
 }

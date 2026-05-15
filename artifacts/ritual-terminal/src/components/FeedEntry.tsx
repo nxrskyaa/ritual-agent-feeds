@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ExternalLink, CheckCircle, Loader2, Bot, User } from 'lucide-react'
+import { ExternalLink, CheckCircle, Loader2, Bot, User, MessageSquare } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress, timeAgo, getExplorerUrl } from '@/lib/utils'
 import { RITUAL_CHAIN_CONFIG } from '@/lib/constants'
@@ -37,12 +37,12 @@ export default function FeedEntry({
       initial={isNew ? { opacity: 0, y: -20, scale: 0.97 } : false}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-      className="terminal-card grain-overlay p-5 md:p-6 relative"
+      className="terminal-card p-5 md:p-6 relative group"
       style={
         isNew
           ? {
               borderLeft: '3px solid var(--coral)',
-              boxShadow: '0 0 30px rgba(255,123,114,0.08)',
+              boxShadow: '0 0 30px rgba(255,123,114,0.08), 0 4px 20px rgba(0,0,0,0.2)',
             }
           : undefined
       }
@@ -52,10 +52,11 @@ export default function FeedEntry({
         {/* Avatar */}
         <button
           onClick={() => onViewProfile?.(entry.address)}
-          className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold transition-transform hover:scale-110 hover:rotate-3"
+          className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold transition-all duration-300 hover:scale-110 hover:rotate-3 hover:shadow-lg"
           style={{
             background: getAddressGradient(entry.address),
             color: '#fff',
+            boxShadow: isNew ? '0 0 20px rgba(255,123,114,0.2)' : 'none',
           }}
         >
           {displayName[0].toUpperCase()}
@@ -78,7 +79,7 @@ export default function FeedEntry({
 
         {/* Type badge */}
         <div
-          className="rounded-lg px-2.5 py-1 flex items-center gap-1.5 shrink-0"
+          className="rounded-lg px-2.5 py-1 flex items-center gap-1.5 shrink-0 transition-all duration-300 group-hover:scale-105"
           style={{ background: typeBg, border: `1px solid ${typeColor}20` }}
         >
           <TypeIcon size={12} style={{ color: typeColor }} />
@@ -96,7 +97,7 @@ export default function FeedEntry({
             href={getExplorerUrl(RITUAL_CHAIN_CONFIG.blockExplorers?.default.url, `/address/${entry.address}`)!}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 transition-colors hover:text-[var(--coral)] text-[var(--text-muted)]"
+            className="shrink-0 transition-all duration-200 hover:text-[var(--coral)] text-[var(--text-muted)] hover:scale-110"
             title="View on Ritual Explorer"
             onClick={(e) => e.stopPropagation()}
           >
@@ -106,9 +107,12 @@ export default function FeedEntry({
       </div>
 
       {/* Message */}
-      <p className="text-sm leading-relaxed mt-4 break-words text-[var(--text-primary)]">
-        {entry.message}
-      </p>
+      <div className="mt-4 flex gap-2">
+        <MessageSquare size={14} className="text-[var(--text-muted)] mt-0.5 flex-shrink-0 opacity-50" />
+        <p className="text-sm leading-relaxed break-words text-[var(--text-primary)]">
+          {entry.message}
+        </p>
+      </div>
     </motion.div>
   )
 }

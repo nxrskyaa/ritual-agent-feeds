@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Loader2, Check, Send, Wallet } from 'lucide-react'
+import { Loader2, Check, Send, Wallet, Terminal } from 'lucide-react'
 import { useRotatingPlaceholder } from '@/hooks/useRotatingPlaceholder'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { FEED_PLACEHOLDERS, MAX_MESSAGE_LENGTH } from '@/lib/constants'
@@ -65,14 +65,14 @@ export default function MessageComposer({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.5 }}
       id="compose"
-      className="terminal-card grain-overlay p-5 md:p-6 relative mb-8"
+      className="terminal-card p-5 md:p-6 relative mb-8"
       style={{ border: '1px solid rgba(255,123,114,0.12)' }}
     >
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center">
-            <Send size={13} className="text-[var(--coral)]" />
+            <Terminal size={13} className="text-[var(--coral)]" />
           </div>
           <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
             Compose
@@ -85,6 +85,7 @@ export default function MessageComposer({
 
       {/* Textarea */}
       <div className="relative">
+        <div className="absolute left-3.5 top-3.5 text-[var(--text-muted)] text-sm font-mono">$</div>
         <AnimatePresence mode="wait">
           {!message && (
             <motion.div
@@ -93,7 +94,7 @@ export default function MessageComposer({
               animate={{ opacity: isVisible ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-3.5 left-4 pointer-events-none text-sm font-light"
+              className="absolute top-3.5 left-8 pointer-events-none text-sm font-light"
               style={{ color: 'var(--text-muted)' }}
             >
               {placeholder}
@@ -103,7 +104,7 @@ export default function MessageComposer({
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full min-h-[100px] bg-[rgba(255,255,255,0.03)] border rounded-xl p-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200"
+          className="w-full min-h-[100px] bg-[rgba(255,255,255,0.03)] border rounded-xl pl-8 pr-3.5 py-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200 font-mono"
           style={{
             color: 'var(--text-primary)',
             borderColor: isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)',

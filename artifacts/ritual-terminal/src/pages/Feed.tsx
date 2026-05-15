@@ -155,15 +155,19 @@ export default function Feed() {
           >
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center">
-                  <Radio size={16} className="text-[var(--coral)]" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center relative overflow-hidden">
+                  <Radio size={16} className="text-[var(--coral)] relative z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[var(--coral)]/10 to-[var(--lavender)]/10 animate-pulse" />
                 </div>
                 <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">
                   The Feed
                 </h1>
               </div>
               <div className="flex items-center gap-2 mt-1 ml-0.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--mint)] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--mint)]" />
+                </span>
                 <p className="caption-text flex items-center gap-1.5">
                   <Clock size={11} />
                   {lastUpdated
