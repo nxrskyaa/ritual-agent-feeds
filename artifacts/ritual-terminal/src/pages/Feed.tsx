@@ -12,6 +12,9 @@ import ToastNotification from '@/components/ToastNotification'
 import ProfileModal from '@/components/ProfileModal'
 import SettingsModal from '@/components/SettingsModal'
 import WalletCard from '@/components/WalletCard'
+import ClickSparkles from '@/components/ClickSparkles'
+import Confetti from '@/components/Confetti'
+import { useConfetti } from '@/components/Confetti'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { generateId } from '@/lib/utils'
@@ -28,6 +31,7 @@ export default function Feed() {
   const [newEntryIds, setNewEntryIds] = useState<Set<string>>(new Set())
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [countdown, setCountdown] = useState(POLL_INTERVAL / 1000)
+  const { pieces: confettiPieces, burst: confettiBurst } = useConfetti()
 
   const knownIdsRef = useRef<Set<string>>(new Set())
   const lastPollRef = useRef<number>(Date.now())
@@ -90,6 +94,7 @@ export default function Feed() {
     setEntries((prev) => [entry, ...prev])
     knownIdsRef.current.add(entry.id)
     setNewEntryIds((prev) => new Set([...prev, entry.id]))
+    confettiBurst()
     setTimeout(() => {
       setNewEntryIds((prev) => {
         const next = new Set(prev)
@@ -97,7 +102,7 @@ export default function Feed() {
         return next
       })
     }, 4000)
-  }, [])
+  }, [confettiBurst])
 
   const handleToast = useCallback((toast: Toast) => {
     setToasts((prev) => [...prev, toast])
@@ -127,6 +132,8 @@ export default function Feed() {
   return (
     <div className="min-h-screen relative flex">
       <AmbientBackground />
+      <ClickSparkles />
+      <Confetti pieces={confettiPieces} />
 
       {/* Sidebar - desktop only */}
       <Sidebar
