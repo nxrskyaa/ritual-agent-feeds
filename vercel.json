@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm --filter @workspace/ritual-terminal run build",
+  "outputDirectory": "artifacts/ritual-terminal/dist/public",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/feed",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
