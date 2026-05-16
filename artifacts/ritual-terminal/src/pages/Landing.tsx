@@ -39,6 +39,13 @@ export default function Landing() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Text */}
             <div className="text-center lg:text-left">
+              {/* Ritual Logo with Flame Aura */}
+              <div className="mb-6 flex justify-center lg:justify-start">
+                <div className="logo-flame w-20 h-20 flex items-center justify-center">
+                  <img src="/logo-256.png" alt="Ritual" className="w-16 h-16 logo-img relative z-10" />
+                </div>
+              </div>
+
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8 border" style={{ background: 'rgba(139,92,246,0.08)', borderColor: 'rgba(139,92,246,0.2)' }}>
                 <Sparkles size={14} style={{ color: 'var(--violet)' }} />

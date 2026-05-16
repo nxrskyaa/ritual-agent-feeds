@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ExternalLink, Twitter, Heart, Sparkles } from 'lucide-react'
+import { ExternalLink, Twitter, Heart } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
-                <Sparkles size={14} style={{ color: 'var(--violet)' }} />
+              <div className="logo-glow w-7 h-7 flex items-center justify-center">
+                <img src="/logo-64.png" alt="Ritual" className="w-6 h-6 logo-img relative z-10" />
               </div>
               <span className="font-heading text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
             </div>

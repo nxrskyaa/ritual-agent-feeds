@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Radio, Globe, Settings, Sparkles, User } from 'lucide-react'
+import { Radio, Globe, Settings, User } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
@@ -25,8 +25,8 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
       {/* Brand */}
       <div className="mb-8">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 flex items-center justify-center rounded-lg group-hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
-            <Sparkles size={14} style={{ color: 'var(--violet)' }} />
+          <div className="logo-glow w-7 h-7 flex items-center justify-center">
+            <img src="/logo-64.png" alt="Ritual" className="w-6 h-6 logo-img relative z-10" />
           </div>
           <span className="font-heading text-sm font-bold tracking-tight" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
         </Link>

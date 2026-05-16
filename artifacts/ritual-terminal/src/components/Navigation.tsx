@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Loader2, Sparkles } from 'lucide-react'
+import { Menu, X, Loader2 } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
@@ -33,9 +33,8 @@ export default function Navigation() {
         }`}
       >
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-lg opacity-20 group-hover:opacity-30 transition-opacity" style={{ background: 'linear-gradient(135deg, var(--violet), var(--purple))' }} />
-            <Sparkles size={18} className="relative group-hover:rotate-12 transition-transform duration-300" style={{ color: 'var(--violet)' }} />
+          <div className="logo-glow w-8 h-8 flex items-center justify-center">
+            <img src="/logo-64.png" alt="Ritual" className="w-7 h-7 logo-img relative z-10" />
           </div>
           <span className="font-heading text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
             Ritual Feeds
@@ -101,8 +100,8 @@ export default function Navigation() {
           style={{ background: 'rgba(8,6,14,0.97)' }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
-              <Sparkles size={20} style={{ color: 'var(--violet)' }} />
+            <div className="logo-glow w-10 h-10 flex items-center justify-center">
+              <img src="/logo-64.png" alt="Ritual" className="w-9 h-9 logo-img relative z-10" />
             </div>
             <span className="font-heading text-xl font-semibold" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
           </div>
