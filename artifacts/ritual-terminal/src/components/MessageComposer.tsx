@@ -66,26 +66,21 @@ export default function MessageComposer({
       transition={{ delay: 0.1, duration: 0.5 }}
       id="compose"
       className="card p-5 md:p-6 mb-8"
-      style={{ border: '1px solid rgba(255,123,114,0.12)' }}
+      style={{ border: '1px solid rgba(255,123,114,0.15)' }}
     >
-      {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center">
-            <Terminal size={13} className="text-[var(--coral)]" />
+          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
+            <Terminal size={13} style={{ color: 'var(--coral)' }} />
           </div>
-          <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
-            Compose
-          </h3>
+          <h3 className="font-heading text-base font-semibold" style={{ color: 'var(--text)' }}>Compose</h3>
         </div>
-        <span className={`label text-xs ${isOverLimit ? 'text-[var(--error)]' : 'text-[var(--text-muted)]'}`}>
+        <span className={`tag ${isOverLimit ? 'text-[var(--error)]' : ''}`} style={{ color: isOverLimit ? 'var(--error)' : 'var(--text-muted)' }}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
 
-      {/* Textarea */}
       <div className="relative">
-        <div className="absolute left-3.5 top-3.5 text-[var(--text-muted)] text-sm font-mono">$</div>
         <AnimatePresence mode="wait">
           {!message && (
             <motion.div
@@ -94,7 +89,7 @@ export default function MessageComposer({
               animate={{ opacity: isVisible ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-3.5 left-8 pointer-events-none text-sm font-light"
+              className="absolute top-3.5 left-4 pointer-events-none text-sm font-light"
               style={{ color: 'var(--text-muted)' }}
             >
               {placeholder}
@@ -104,40 +99,31 @@ export default function MessageComposer({
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full min-h-[100px] bg-[rgba(255,255,255,0.03)] border rounded-xl pl-8 pr-3.5 py-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200 font-mono"
+          className="w-full min-h-[100px] rounded-xl p-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200"
           style={{
-            color: 'var(--text-primary)',
-            borderColor: isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)',
+            background: 'rgba(255,255,255,0.03)',
+            color: 'var(--text)',
+            border: `1px solid ${isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'}`,
           }}
           onFocus={(e) => {
             if (!isOverLimit) {
               e.currentTarget.style.borderColor = 'rgba(255,123,114,0.3)'
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(255,123,114,0.06)'
             }
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor = isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'
-            e.currentTarget.style.boxShadow = 'none'
           }}
         />
       </div>
 
-      {/* Post button */}
       <div className="flex items-center justify-end mt-4">
         {!walletConnected ? (
-          <button
-            onClick={connectWallet}
-            className="btn-primary text-sm py-2 px-5 flex items-center gap-2"
-          >
+          <button onClick={connectWallet} className="btn text-sm py-2 px-5 flex items-center gap-2">
             <Wallet size={14} />
             Connect to Post
           </button>
         ) : (
-          <button
-            onClick={handleSubmit}
-            disabled={!canSubmit}
-            className="btn-primary text-sm py-2 px-5 flex items-center gap-2"
-          >
+          <button onClick={handleSubmit} disabled={!canSubmit} className="btn text-sm py-2 px-5 flex items-center gap-2">
             {isPosting ? (
               <><Loader2 size={14} className="animate-spin" /> Sending...</>
             ) : showSuccess ? (

@@ -1,47 +1,24 @@
 import { motion } from 'framer-motion'
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 
 interface ScrollRevealProps {
   children: React.ReactNode
-  className?: string
   delay?: number
   direction?: 'up' | 'down' | 'left' | 'right'
-  duration?: number
-  y?: number
-  x?: number
 }
 
-export default function ScrollReveal({
-  children,
-  className = '',
-  delay = 0,
-  direction = 'up',
-  duration = 0.6,
-  y = 30,
-  x = 0,
-}: ScrollRevealProps) {
-  const { ref, isInView } = useIntersectionObserver({ threshold: 0.1, triggerOnce: true })
-
-  const initial = {
-    opacity: 0,
-    y: direction === 'up' ? y : direction === 'down' ? -y : 0,
-    x: direction === 'left' ? x : direction === 'right' ? -x : 0,
-  }
+export default function ScrollReveal({ children, delay = 0, direction = 'up' }: ScrollRevealProps) {
+  const distance = direction === 'up' || direction === 'down' ? 16 : 12
+  const y = direction === 'up' ? distance : direction === 'down' ? -distance : 0
+  const x = direction === 'left' ? distance : direction === 'right' ? -distance : 0
 
   return (
-    <div ref={ref}>
-      <motion.div
-        initial={initial}
-        animate={isInView ? { opacity: 1, y: 0, x: 0 } : initial}
-        transition={{
-          duration,
-          delay,
-          ease: [0.34, 1.56, 0.64, 1],
-        }}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0.92, x, y }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.45, delay, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
   )
 }

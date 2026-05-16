@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Radio, Clock } from 'lucide-react'
-
 import AmbientBackground from '@/components/AmbientBackground'
 import Sidebar from '@/components/Sidebar'
 import RightStatsPanel from '@/components/RightStatsPanel'
@@ -12,9 +11,6 @@ import ToastNotification from '@/components/ToastNotification'
 import ProfileModal from '@/components/ProfileModal'
 import SettingsModal from '@/components/SettingsModal'
 import WalletCard from '@/components/WalletCard'
-import ClickSparkles from '@/components/ClickSparkles'
-import Confetti from '@/components/Confetti'
-import { useConfetti } from '@/components/Confetti'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { generateId } from '@/lib/utils'
@@ -31,7 +27,6 @@ export default function Feed() {
   const [newEntryIds, setNewEntryIds] = useState<Set<string>>(new Set())
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [countdown, setCountdown] = useState(POLL_INTERVAL / 1000)
-  const { pieces: confettiPieces, burst: confettiBurst } = useConfetti()
 
   const knownIdsRef = useRef<Set<string>>(new Set())
   const lastPollRef = useRef<number>(Date.now())
@@ -52,28 +47,32 @@ export default function Feed() {
   }, [])
 
   const loadMessages = useCallback(async () => {
-    const msgs = await getMessages(0, 50)
-    const sorted = [...msgs].sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    )
+    try {
+      const msgs = await getMessages(0, 50)
+      const sorted = [...msgs].sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
 
-    setEntries(() => {
-      const incomingIds = new Set(sorted.map((m) => m.id))
-      const genuinelyNew = sorted
-        .filter((m) => !knownIdsRef.current.has(m.id))
-        .map((m) => m.id)
+      setEntries(() => {
+        const incomingIds = new Set(sorted.map((m) => m.id))
+        const genuinelyNew = sorted
+          .filter((m) => !knownIdsRef.current.has(m.id))
+          .map((m) => m.id)
 
-      if (knownIdsRef.current.size > 0 && genuinelyNew.length > 0) {
-        markNew(genuinelyNew)
-      }
+        if (knownIdsRef.current.size > 0 && genuinelyNew.length > 0) {
+          markNew(genuinelyNew)
+        }
 
-      knownIdsRef.current = incomingIds
-      return sorted
-    })
+        knownIdsRef.current = incomingIds
+        return sorted
+      })
 
-    setLastUpdated(new Date())
-    lastPollRef.current = Date.now()
-    setCountdown(POLL_INTERVAL / 1000)
+      setLastUpdated(new Date())
+      lastPollRef.current = Date.now()
+      setCountdown(POLL_INTERVAL / 1000)
+    } catch {
+      // silent fail
+    }
   }, [getMessages, markNew])
 
   useEffect(() => {
@@ -94,7 +93,6 @@ export default function Feed() {
     setEntries((prev) => [entry, ...prev])
     knownIdsRef.current.add(entry.id)
     setNewEntryIds((prev) => new Set([...prev, entry.id]))
-    confettiBurst()
     setTimeout(() => {
       setNewEntryIds((prev) => {
         const next = new Set(prev)
@@ -102,7 +100,7 @@ export default function Feed() {
         return next
       })
     }, 4000)
-  }, [confettiBurst])
+  }, [])
 
   const handleToast = useCallback((toast: Toast) => {
     setToasts((prev) => [...prev, toast])
@@ -132,10 +130,7 @@ export default function Feed() {
   return (
     <div className="min-h-screen relative flex">
       <AmbientBackground />
-      <ClickSparkles />
-      <Confetti pieces={confettiPieces} />
 
-      {/* Sidebar - desktop only */}
       <Sidebar
         onSettingsClick={() => setSettingsOpen(true)}
         onProfileClick={() => {
@@ -146,51 +141,40 @@ export default function Feed() {
         }}
       />
 
-      {/* Main content */}
       <main className="flex-1 min-w-0 flex flex-col">
-        {/* Mobile nav */}
         <div className="lg:hidden">
           <Navigation />
         </div>
 
-        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 lg:pt-8 pt-20">
+        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 pt-20 lg:pt-8">
           {/* Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-8"
-          >
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-8">
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20 flex items-center justify-center relative overflow-hidden">
-                  <Radio size={16} className="text-[var(--coral)] relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-[var(--coral)]/10 to-[var(--lavender)]/10 animate-pulse" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
+                  <Radio size={16} style={{ color: 'var(--coral)' }} />
                 </div>
-                <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">
-                  The Feed
-                </h1>
+                <h1 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>The Feed</h1>
               </div>
-              <div className="flex items-center gap-2 mt-1 ml-0.5">
+              <div className="flex items-center gap-2 mt-1">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--mint)] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--mint)]" />
+                  <span className="animate-ping absolute h-full w-full rounded-full bg-[var(--mint)] opacity-75" />
+                  <span className="relative rounded-full h-2 w-2 bg-[var(--mint)]" />
                 </span>
-                <p className="label flex items-center gap-1.5">
+                <span className="tag flex items-center gap-1.5">
                   <Clock size={11} />
                   {lastUpdated
                     ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · refresh in ${countdown}s`
                     : 'Warming up…'}
-                </p>
+                </span>
               </div>
             </div>
           </motion.div>
 
-          {/* Wallet card - mobile */}
           <div className="lg:hidden mb-6">
             <WalletCard />
           </div>
 
-          {/* Compose */}
           <MessageComposer
             walletConnected={isConnected}
             walletAddress={address}
@@ -199,7 +183,6 @@ export default function Feed() {
             connectWallet={handleConnect}
           />
 
-          {/* Feed */}
           {entries.length === 0 && lastUpdated === null ? (
             <div className="flex flex-col gap-4">
               {[...Array(5)].map((_, i) => (
@@ -219,15 +202,9 @@ export default function Feed() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="card p-12 text-center"
-            >
-              <p className="text-base font-light mb-2 text-[var(--text-secondary)]">
-                No messages yet
-              </p>
-              <p className="label">Be the pioneer. Drop the first message.</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card p-12 text-center">
+              <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
+              <p className="tag">Be the pioneer. Drop the first message.</p>
             </motion.div>
           ) : (
             <div className="flex flex-col gap-3">
@@ -246,21 +223,9 @@ export default function Feed() {
         </div>
       </main>
 
-      {/* Right panel - xl only */}
       <RightStatsPanel />
-
-      {/* Toasts */}
       <ToastNotification toasts={toasts} onRemove={removeToast} />
-
-      {/* Profile modal */}
-      <ProfileModal
-        isOpen={profileOpen}
-        onClose={() => setProfileOpen(false)}
-        address={profileAddress}
-        entries={entries}
-      />
-
-      {/* Settings modal */}
+      <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} address={profileAddress} entries={entries} />
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   )

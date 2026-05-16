@@ -31,23 +31,21 @@ export default function Navigation() {
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{ duration: 0.5 }}
         className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 transition-all duration-300 ${
-          scrolled ? 'nav-glass' : 'bg-transparent'
+          scrolled ? 'glass' : ''
         }`}
       >
-        {/* Brand */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--coral)] to-[var(--lavender)] opacity-20 group-hover:opacity-30 transition-opacity" />
-            <Sparkles size={18} className="relative text-[var(--coral)] group-hover:rotate-12 transition-transform duration-300" />
+            <div className="absolute inset-0 rounded-lg opacity-20 group-hover:opacity-30 transition-opacity" style={{ background: 'linear-gradient(135deg, var(--coral), var(--lavender))' }} />
+            <Sparkles size={18} className="relative group-hover:rotate-12 transition-transform duration-300" style={{ color: 'var(--coral)' }} />
           </div>
-          <span className="font-heading text-sm font-semibold tracking-tight text-[var(--text-primary)]">
+          <span className="font-heading text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
             Ritual Feeds
           </span>
         </Link>
 
-        {/* Center nav links - desktop */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) =>
             link.external ? (
@@ -56,7 +54,10 @@ export default function Navigation() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full text-sm font-normal text-[var(--text-secondary)] hover:text-[var(--coral)] hover:bg-[var(--coral-dim)] transition-all duration-200"
+                className="px-4 py-2 rounded-full text-sm font-normal transition-all duration-200"
+                style={{ color: 'var(--text-secondary)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--coral)'; e.currentTarget.style.background = 'var(--coral-soft)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent' }}
               >
                 {link.label}
               </a>
@@ -64,11 +65,13 @@ export default function Navigation() {
               <Link
                 key={link.label}
                 to={link.href}
-                className={`px-4 py-2 rounded-full text-sm font-normal transition-all duration-200 ${
-                  location.pathname === link.href
-                    ? 'text-[var(--coral)] bg-[var(--coral-dim)]'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--coral)] hover:bg-[var(--coral-dim)]'
-                }`}
+                className="px-4 py-2 rounded-full text-sm font-normal transition-all duration-200"
+                style={{
+                  color: location.pathname === link.href ? 'var(--coral)' : 'var(--text-secondary)',
+                  background: location.pathname === link.href ? 'var(--coral-soft)' : 'transparent',
+                }}
+                onMouseEnter={(e) => { if (location.pathname !== link.href) { e.currentTarget.style.color = 'var(--coral)'; e.currentTarget.style.background = 'var(--coral-soft)' }}}
+                onMouseLeave={(e) => { if (location.pathname !== link.href) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent' }}}
               >
                 {link.label}
               </Link>
@@ -76,139 +79,78 @@ export default function Navigation() {
           )}
         </div>
 
-        {/* Right side - Wallet Button */}
         <div className="flex items-center gap-3">
           {isConnected && address ? (
             <div className="hidden md:flex items-center gap-2">
               <div className="glass rounded-full px-3 py-1.5 flex items-center gap-2">
-                <div
-                  className="w-4 h-4 rounded-full shrink-0 ring-2 ring-white/10"
-                  style={{ background: getAddressGradient(address) }}
-                />
-                <span className="font-mono-label text-[0.7rem] text-[var(--text-secondary)]">{truncateAddress(address)}</span>
+                <div className="w-4 h-4 rounded-full shrink-0" style={{ background: getAddressGradient(address) }} />
+                <span className="tag">{truncateAddress(address)}</span>
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
               </div>
-              <button
-                onClick={disconnect}
-                className="text-xs text-[var(--text-tertiary)] hover:text-[var(--coral)] transition-colors px-2 py-1"
-              >
+              <button onClick={disconnect} className="text-xs transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text-muted)' }}>
                 Exit
               </button>
             </div>
           ) : (
-            <button
-              onClick={connect}
-              disabled={isConnecting}
-              className="hidden md:flex btn-primary text-sm py-2 px-4 items-center gap-2"
-            >
+            <button onClick={connect} disabled={isConnecting} className="hidden md:flex btn text-sm py-2 px-4">
               {isConnecting ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" />
-                  Connecting...
-                </>
+                <><Loader2 size={14} className="animate-spin" /> Connecting...</>
               ) : (
-                <>
-                  <Sparkles size={14} />
-                  Connect
-                </>
+                <><Sparkles size={14} /> Connect</>
               )}
             </button>
           )}
 
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? (
-              <X size={20} className="text-[var(--text-primary)]" />
-            ) : (
-              <Menu size={20} className="text-[var(--text-primary)]" />
-            )}
+          <button className="md:hidden p-2 rounded-lg transition-colors" style={{ color: 'var(--text)' }} onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </motion.nav>
 
-      {/* Mobile overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(24px)' }}
-            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[var(--terminal-bg)]/90 flex flex-col items-center justify-center gap-6 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 md:hidden"
+            style={{ background: 'rgba(12,12,29,0.95)' }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-[var(--coral)]/20 to-[var(--lavender)]/20">
-                <Sparkles size={20} className="text-[var(--coral)]" />
+              <div className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
+                <Sparkles size={20} style={{ color: 'var(--coral)' }} />
               </div>
-              <span className="font-heading text-xl font-semibold text-[var(--text-primary)]">
-                Ritual Feeds
-              </span>
+              <span className="font-heading text-xl font-semibold" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
             </div>
 
-            {/* Mobile wallet button */}
             {isConnected && address ? (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center gap-3 mb-4"
-              >
-                <div className="flex items-center gap-2 terminal-glass rounded-full px-4 py-2">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center gap-3 mb-4">
+                <div className="glass rounded-full px-4 py-2 flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full" style={{ background: getAddressGradient(address) }} />
-                  <span className="font-mono-label text-sm text-[var(--text-secondary)]">{truncateAddress(address)}</span>
+                  <span className="tag">{truncateAddress(address)}</span>
                   <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
                 </div>
-                <button onClick={disconnect} className="btn-ghost text-sm">
-                  Disconnect
-                </button>
+                <button onClick={disconnect} className="btn-ghost text-sm">Disconnect</button>
               </motion.div>
             ) : (
-              <motion.button
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                onClick={connect}
-                disabled={isConnecting}
-                className="btn-primary mb-4 flex items-center gap-2"
-              >
+              <motion.button initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} onClick={connect} disabled={isConnecting} className="btn mb-4">
                 {isConnecting ? (
-                  <>
-                    <Loader2 size={14} className="animate-spin" />
-                    Connecting...
-                  </>
+                  <><Loader2 size={14} className="animate-spin" /> Connecting...</>
                 ) : (
-                  <>
-                    <Sparkles size={14} />
-                    Connect Wallet
-                  </>
+                  <><Sparkles size={14} /> Connect Wallet</>
                 )}
               </motion.button>
             )}
 
             {navLinks.map((link, i) =>
               link.external ? (
-                <motion.a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.3 }}
-                  className="font-heading text-2xl font-light text-[var(--text-primary)] hover:text-[var(--coral)] transition-colors"
-                >
+                <motion.a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="font-heading text-2xl font-light transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text)' }}>
                   {link.label}
                 </motion.a>
               ) : (
-                <motion.div
-                  key={link.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.3 }}
-                >
-                  <Link to={link.href} className="font-heading text-2xl font-light text-[var(--text-primary)] hover:text-[var(--coral)] transition-colors">
+                <motion.div key={link.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
+                  <Link to={link.href} className="font-heading text-2xl font-light transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text)' }}>
                     {link.label}
                   </Link>
                 </motion.div>
