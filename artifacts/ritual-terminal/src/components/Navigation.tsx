@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Loader2 } from 'lucide-react'
+import { Menu, X, Loader2, Sparkles } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
