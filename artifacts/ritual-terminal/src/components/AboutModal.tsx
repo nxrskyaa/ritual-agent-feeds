@@ -26,7 +26,7 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25 }}
             className="card relative w-full max-w-md overflow-hidden"
-            style={{ border: '1px solid rgba(255,123,114,0.15)' }}
+            style={{ border: '1px solid rgba(139,92,246,0.15)' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top gradient line */}
@@ -45,7 +45,7 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
               {/* Logo */}
               <div className="flex justify-center mb-5">
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-                  <Sparkles size={28} style={{ color: 'var(--coral)' }} />
+                  <Sparkles size={28} style={{ color: 'var(--violet)' }} />
                 </div>
               </div>
 

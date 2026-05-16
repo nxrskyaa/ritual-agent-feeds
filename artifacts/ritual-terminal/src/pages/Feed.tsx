@@ -158,8 +158,8 @@ export default function Feed() {
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute h-full w-full rounded-full bg-[var(--mint)] opacity-75" />
-                  <span className="relative rounded-full h-2 w-2 bg-[var(--mint)]" />
+                  <span className="animate-ping absolute h-full w-full rounded-full bg-[var(--cyan)] opacity-75" />
+                  <span className="relative rounded-full h-2 w-2 bg-[var(--cyan)]" />
                 </span>
                 <span className="tag flex items-center gap-1.5">
                   <Clock size={11} />

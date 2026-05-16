@@ -4,25 +4,26 @@
 
 @layer base {
   :root {
-    --bg: #0a0a14;
-    --bg-elevated: #11111f;
-    --surface: rgba(255,255,255,0.04);
-    --surface-hover: rgba(255,255,255,0.07);
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,123,114,0.35);
+    --bg: #08060e;
+    --bg-elevated: #0f0d18;
+    --surface: rgba(255,255,255,0.03);
+    --surface-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(139,92,246,0.35);
 
-    --coral: #ff7b72;
-    --coral-soft: rgba(255,123,114,0.12);
-    --mint: #7ee787;
-    --mint-soft: rgba(126,231,135,0.12);
-    --lavender: #d2b4ff;
-    --lavender-soft: rgba(210,180,255,0.12);
-    --sunshine: #ffd166;
-    --sunshine-soft: rgba(255,209,102,0.12);
+    --violet: #8b5cf6;
+    --violet-soft: rgba(139,92,246,0.12);
+    --violet-glow: rgba(139,92,246,0.25);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167,139,250,0.1);
+    --cyan: #22d3ee;
+    --cyan-soft: rgba(34,211,238,0.1);
+    --pink: #f472b6;
+    --pink-soft: rgba(244,114,182,0.1);
 
-    --text: #f0e6d3;
-    --text-secondary: #9b94b0;
-    --text-muted: #6b6680;
+    --text: #f8f7ff;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
 
     --radius: 16px;
   }
@@ -36,20 +37,19 @@
   }
 
   ::selection {
-    background: rgba(255, 123, 114, 0.3);
+    background: rgba(139, 92, 246, 0.3);
     color: #fff;
   }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--coral), var(--lavender));
+    background: linear-gradient(180deg, var(--violet), var(--purple));
     border-radius: 99px;
   }
 }
 
 @layer components {
-  /* Card — solid, clean, no blur */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -60,26 +60,22 @@
     background: var(--surface-hover);
     border-color: var(--border-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 24px rgba(139,92,246,0.08);
   }
 
-  /* Static card — no hover transform */
   .card-static {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
   }
 
-  /* Glass — only for nav bars, NOT for cards with text */
   .glass {
-    background: rgba(10,10,20,0.85);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    background: rgba(8,6,14,0.85);
+    border-bottom: 1px solid var(--border);
   }
 
-  /* Primary button — coral gradient pill */
   .btn {
-    background: linear-gradient(135deg, var(--coral), #e85d55);
+    background: linear-gradient(135deg, var(--violet), #7c3aed);
     color: #fff;
     border-radius: 999px;
     font-weight: 500;
@@ -97,8 +93,8 @@
   }
   .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(255,123,114,0.3);
-    filter: brightness(1.08);
+    box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+    filter: brightness(1.1);
   }
   .btn:disabled {
     opacity: 0.5;
@@ -108,7 +104,6 @@
     filter: none;
   }
 
-  /* Ghost button — outlined */
   .btn-ghost {
     background: transparent;
     border: 1px solid var(--border);
@@ -131,7 +126,6 @@
     border-color: var(--border-hover);
   }
 
-  /* Tag / label — mono small caps */
   .tag {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
@@ -141,13 +135,6 @@
     color: var(--text-muted);
   }
 
-  /* Accent tag colors */
-  .tag-coral { color: var(--coral); }
-  .tag-mint { color: var(--mint); }
-  .tag-lavender { color: var(--lavender); }
-  .tag-sunshine { color: var(--sunshine); }
-
-  /* Input base */
   .input {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
@@ -166,7 +153,6 @@
     color: var(--text-muted);
   }
 
-  /* Nav link */
   .nav-link {
     padding: 0.5rem 1rem;
     border-radius: 999px;
@@ -175,15 +161,14 @@
     transition: all 0.2s ease;
   }
   .nav-link:hover {
-    color: var(--coral);
-    background: var(--coral-soft);
+    color: var(--violet);
+    background: var(--violet-soft);
   }
   .nav-link-active {
-    color: var(--coral);
-    background: var(--coral-soft);
+    color: var(--violet);
+    background: var(--violet-soft);
   }
 
-  /* Sidebar link */
   .sidebar-link {
     display: flex;
     align-items: center;
@@ -199,8 +184,8 @@
     background: rgba(255,255,255,0.04);
   }
   .sidebar-link-active {
-    color: var(--coral);
-    background: var(--coral-soft);
+    color: var(--violet);
+    background: var(--violet-soft);
     font-weight: 500;
   }
 }

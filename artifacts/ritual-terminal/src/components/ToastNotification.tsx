@@ -11,14 +11,14 @@ export default function ToastNotification({ toasts, onRemove }: ToastNotificatio
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((toast) => {
         const icon =
-          toast.type === 'success' ? <CheckCircle size={18} style={{ color: 'var(--mint)' }} /> :
-          toast.type === 'error' ? <XCircle size={18} style={{ color: 'var(--coral)' }} /> :
-          <Info size={18} style={{ color: 'var(--lavender)' }} />
+          toast.type === 'success' ? <CheckCircle size={18} style={{ color: 'var(--cyan)' }} /> :
+          toast.type === 'error' ? <XCircle size={18} style={{ color: 'var(--pink)' }} /> :
+          <Info size={18} style={{ color: 'var(--purple)' }} />
 
         const borderColor =
-          toast.type === 'success' ? 'var(--mint)' :
-          toast.type === 'error' ? 'var(--coral)' :
-          'var(--lavender)'
+          toast.type === 'success' ? 'var(--cyan)' :
+          toast.type === 'error' ? 'var(--pink)' :
+          'var(--purple)'
 
         return (
           <div
@@ -35,7 +35,7 @@ export default function ToastNotification({ toasts, onRemove }: ToastNotificatio
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs mt-1 block hover:underline"
-                  style={{ color: 'var(--coral)' }}
+                  style={{ color: 'var(--violet)' }}
                 >
                   View transaction
                 </a>

@@ -48,7 +48,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25 }}
             className="card relative w-full max-w-md overflow-hidden"
-            style={{ border: '1px solid rgba(255,123,114,0.15)' }}
+            style={{ border: '1px solid rgba(139,92,246,0.15)' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top gradient line */}
@@ -66,7 +66,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <div className="p-8">
               {/* Title */}
               <div className="flex items-center gap-2 mb-6">
-                <Sparkles size={18} style={{ color: 'var(--coral)' }} />
+                <Sparkles size={18} style={{ color: 'var(--violet)' }} />
                 <h2 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>
                   Settings
                 </h2>
@@ -75,7 +75,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               {/* Contract Section */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <Database size={16} style={{ color: 'var(--coral)' }} />
+                  <Database size={16} style={{ color: 'var(--violet)' }} />
                   <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                     Contract
                   </span>
@@ -173,8 +173,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               {/* Danger Zone */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Trash2 size={16} style={{ color: 'var(--coral)' }} />
-                  <span className="text-sm font-medium" style={{ color: 'var(--coral)' }}>
+                  <Trash2 size={16} style={{ color: 'var(--violet)' }} />
+                  <span className="text-sm font-medium" style={{ color: 'var(--violet)' }}>
                     Reset
                   </span>
                 </div>

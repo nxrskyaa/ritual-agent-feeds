@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-                <Sparkles size={14} style={{ color: 'var(--coral)' }} />
+              <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
+                <Sparkles size={14} style={{ color: 'var(--violet)' }} />
               </div>
               <span className="font-heading text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
             </div>
@@ -21,15 +21,15 @@ export default function Footer() {
 
           <div className="flex flex-col gap-3">
             <span className="font-heading text-xs font-medium tracking-wider uppercase mb-1" style={{ color: 'var(--text-muted)' }}>Explore</span>
-            <Link to="/feed" className="text-sm transition-colors hover:text-[var(--coral)] w-fit" style={{ color: 'var(--text-muted)' }}>Feed</Link>
-            <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-[var(--coral)] w-fit" style={{ color: 'var(--text-muted)' }}>Docs</a>
+            <Link to="/feed" className="text-sm transition-colors hover:text-[var(--violet)] w-fit" style={{ color: 'var(--text-muted)' }}>Feed</Link>
+            <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-[var(--violet)] w-fit" style={{ color: 'var(--text-muted)' }}>Docs</a>
           </div>
 
           <div className="flex flex-col gap-3">
             <span className="font-heading text-xs font-medium tracking-wider uppercase mb-1" style={{ color: 'var(--text-muted)' }}>Join</span>
             <Link to="/feed" className="btn w-fit text-sm py-2 px-4">Open Terminal</Link>
             <div className="flex items-center gap-1.5 mt-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
               <span className="tag">Running on Ritual</span>
             </div>
           </div>
@@ -39,13 +39,13 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="tag flex items-center gap-1.5">
-            Made with <Heart size={12} style={{ color: 'var(--coral)' }} fill="var(--coral)" /> by nxrskyaa
+            Made with <Heart size={12} style={{ color: 'var(--violet)' }} fill="var(--violet)" /> by nxrskyaa
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text-muted)' }}>
+            <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text-muted)' }}>
               <ExternalLink size={18} />
             </a>
-            <a href="https://x.com/nxrskyaa" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text-muted)' }}>
+            <a href="https://x.com/nxrskyaa" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text-muted)' }}>
               <Twitter size={18} />
             </a>
           </div>

@@ -34,8 +34,8 @@ export default function Navigation() {
       >
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-lg opacity-20 group-hover:opacity-30 transition-opacity" style={{ background: 'linear-gradient(135deg, var(--coral), var(--lavender))' }} />
-            <Sparkles size={18} className="relative group-hover:rotate-12 transition-transform duration-300" style={{ color: 'var(--coral)' }} />
+            <div className="absolute inset-0 rounded-lg opacity-20 group-hover:opacity-30 transition-opacity" style={{ background: 'linear-gradient(135deg, var(--violet), var(--purple))' }} />
+            <Sparkles size={18} className="relative group-hover:rotate-12 transition-transform duration-300" style={{ color: 'var(--violet)' }} />
           </div>
           <span className="font-heading text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
             Ritual Feeds
@@ -72,9 +72,9 @@ export default function Navigation() {
               <div className="glass rounded-full px-3 py-1.5 flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full shrink-0" style={{ background: getAddressGradient(address) }} />
                 <span className="tag">{truncateAddress(address)}</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
               </div>
-              <button onClick={disconnect} className="text-xs transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text-muted)' }}>
+              <button onClick={disconnect} className="text-xs transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text-muted)' }}>
                 Exit
               </button>
             </div>
@@ -98,11 +98,11 @@ export default function Navigation() {
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 md:hidden"
-          style={{ background: 'rgba(10,10,20,0.97)' }}
+          style={{ background: 'rgba(8,6,14,0.97)' }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-              <Sparkles size={20} style={{ color: 'var(--coral)' }} />
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
+              <Sparkles size={20} style={{ color: 'var(--violet)' }} />
             </div>
             <span className="font-heading text-xl font-semibold" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
           </div>
@@ -112,7 +112,7 @@ export default function Navigation() {
               <div className="glass rounded-full px-4 py-2 flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full" style={{ background: getAddressGradient(address) }} />
                 <span className="tag">{truncateAddress(address)}</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
               </div>
               <button onClick={disconnect} className="btn-ghost text-sm">Disconnect</button>
             </div>
@@ -128,11 +128,11 @@ export default function Navigation() {
 
           {navLinks.map((link) =>
             link.external ? (
-              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="font-heading text-2xl font-light transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text)' }}>
+              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="font-heading text-2xl font-light transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text)' }}>
                 {link.label}
               </a>
             ) : (
-              <Link key={link.label} to={link.href} className="font-heading text-2xl font-light transition-colors hover:text-[var(--coral)]" style={{ color: 'var(--text)' }}>
+              <Link key={link.label} to={link.href} className="font-heading text-2xl font-light transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text)' }}>
                 {link.label}
               </Link>
             )

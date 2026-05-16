@@ -25,8 +25,8 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
       {/* Brand */}
       <div className="mb-8">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 flex items-center justify-center rounded-lg group-hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-            <Sparkles size={14} style={{ color: 'var(--coral)' }} />
+          <div className="w-7 h-7 flex items-center justify-center rounded-lg group-hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(167,139,250,0.2))' }}>
+            <Sparkles size={14} style={{ color: 'var(--violet)' }} />
           </div>
           <span className="font-heading text-sm font-bold tracking-tight" style={{ color: 'var(--text)' }}>Ritual Feeds</span>
         </Link>
@@ -68,7 +68,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
             <p className="text-sm font-medium truncate leading-tight font-heading" style={{ color: 'var(--text)' }}>{displayName}</p>
             <p className="tag truncate">{truncateAddress(address)}</p>
           </div>
-          <User size={14} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--coral)' }} />
+          <User size={14} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--violet)' }} />
         </button>
       )}
     </aside>

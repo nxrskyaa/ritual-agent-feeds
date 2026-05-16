@@ -65,7 +65,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25 }}
             className="card relative w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col"
-            style={{ border: '1px solid rgba(255,123,114,0.15)' }}
+            style={{ border: '1px solid rgba(139,92,246,0.15)' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top gradient line */}
@@ -196,7 +196,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                     <div
                       key={entry.id}
                       className="card-static p-3"
-                      style={{ borderLeft: '3px solid var(--coral)' }}
+                      style={{ borderLeft: '3px solid var(--violet)' }}
                     >
                       <p className="text-sm" style={{ color: 'var(--text)' }}>
                         {entry.message}

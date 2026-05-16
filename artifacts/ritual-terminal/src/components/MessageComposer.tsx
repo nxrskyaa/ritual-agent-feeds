@@ -28,7 +28,6 @@ export default function MessageComposer({
   const isOverLimit = charCount > MAX_MESSAGE_LENGTH
   const canSubmit = walletConnected && message.trim().length > 0 && !isOverLimit && !isPosting
 
-  // Static placeholder — no rotation, no AnimatePresence, no flicker
   const placeholder = FEED_PLACEHOLDERS[0]
 
   const handleSubmit = useCallback(async () => {
@@ -60,16 +59,16 @@ export default function MessageComposer({
   }, [canSubmit, walletConnected, walletAddress, connectWallet, message, postMessage, onSubmit, onToast])
 
   return (
-    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(255,123,114,0.12)' }}>
+    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.15), rgba(210,180,255,0.15))' }}>
-            <Terminal size={13} className="text-[var(--coral)]" />
+          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
+            <Terminal size={13} style={{ color: 'var(--violet)' }} />
           </div>
           <h3 className="font-heading text-sm font-semibold" style={{ color: 'var(--text)' }}>Compose</h3>
         </div>
-        <span className="tag" style={{ color: isOverLimit ? 'var(--coral)' : 'var(--text-muted)' }}>
+        <span className="tag" style={{ color: isOverLimit ? 'var(--pink)' : 'var(--text-muted)' }}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
@@ -91,13 +90,13 @@ export default function MessageComposer({
           style={{
             background: 'rgba(255,255,255,0.03)',
             color: 'var(--text)',
-            border: `1px solid ${isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'}`,
+            border: `1px solid ${isOverLimit ? 'rgba(244,114,182,0.4)' : 'rgba(255,255,255,0.06)'}`,
           }}
           onFocus={(e) => {
-            if (!isOverLimit) e.currentTarget.style.borderColor = 'rgba(255,123,114,0.25)'
+            if (!isOverLimit) e.currentTarget.style.borderColor = 'rgba(139,92,246,0.25)'
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'
+            e.currentTarget.style.borderColor = isOverLimit ? 'rgba(244,114,182,0.4)' : 'rgba(255,255,255,0.06)'
           }}
         />
       </div>

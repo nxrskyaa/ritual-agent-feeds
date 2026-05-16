@@ -7,16 +7,16 @@ export default function RightStatsPanel() {
   const { totalMessages, activeWallets, isLoading } = useContractStats()
 
   const statCards = [
-    { icon: MessageCircle, value: totalMessages, label: 'Messages', color: 'var(--coral)', bg: 'var(--coral-soft)' },
-    { icon: Users, value: activeWallets, label: 'Wallets', color: 'var(--lavender)', bg: 'var(--lavender-soft)' },
-    { icon: Zap, value: tps, label: 'TPS', color: 'var(--sunshine)', bg: 'var(--sunshine-soft)' },
+    { icon: MessageCircle, value: totalMessages, label: 'Messages', color: 'var(--violet)', bg: 'var(--violet-soft)' },
+    { icon: Users, value: activeWallets, label: 'Wallets', color: 'var(--purple)', bg: 'var(--purple-soft)' },
+    { icon: Zap, value: tps, label: 'TPS', color: 'var(--cyan)', bg: 'var(--cyan-soft)' },
   ]
 
   return (
     <aside className="hidden xl:flex flex-col w-[280px] h-screen sticky top-0 glass border-l border-[var(--border)] p-5 overflow-y-auto">
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
-          <Activity size={16} style={{ color: 'var(--coral)' }} />
+          <Activity size={16} style={{ color: 'var(--violet)' }} />
           <h3 className="font-heading text-base font-bold" style={{ color: 'var(--text)' }}>Network Pulse</h3>
         </div>
         <p className="tag">Real-time stats from Ritual</p>
@@ -38,9 +38,9 @@ export default function RightStatsPanel() {
         ))}
       </div>
 
-      <div className="card-static p-4" style={{ borderLeft: '3px solid var(--mint)' }}>
+      <div className="card-static p-4" style={{ borderLeft: '3px solid var(--cyan)' }}>
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-[var(--cyan)] animate-pulse" />
           <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Online</span>
         </div>
         <p className="tag">Ritual Testnet · Chain 1979</p>

@@ -16,17 +16,17 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
 
   const statusIcon =
     entry.status === 'confirmed' ? (
-      <CheckCircle size={13} className="text-[var(--mint)]" />
+      <CheckCircle size={13} style={{ color: 'var(--cyan)' }} />
     ) : entry.status === 'pending' ? (
-      <Loader2 size={13} className="text-[var(--sunshine)] animate-spin" />
+      <Loader2 size={13} style={{ color: 'var(--pink)' }} className="animate-spin" />
     ) : null
 
   const TypeIcon = entry.type === 'agent' ? Bot : User
-  const typeColor = entry.type === 'agent' ? 'var(--lavender)' : 'var(--text-muted)'
-  const typeBg = entry.type === 'agent' ? 'var(--lavender-soft)' : 'rgba(255,255,255,0.04)'
+  const typeColor = entry.type === 'agent' ? 'var(--purple)' : 'var(--text-muted)'
+  const typeBg = entry.type === 'agent' ? 'var(--purple-soft)' : 'rgba(255,255,255,0.04)'
 
   const cardStyle = isNew
-    ? { borderLeft: '3px solid var(--coral)', boxShadow: '0 0 20px rgba(255,123,114,0.06)' }
+    ? { borderLeft: '3px solid var(--violet)', boxShadow: '0 0 20px rgba(139,92,246,0.08)' }
     : undefined
 
   return (
@@ -45,7 +45,7 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
         <div className="flex-1 min-w-0">
           <button
             onClick={() => onViewProfile?.(entry.address)}
-            className="text-sm font-semibold block transition-colors hover:text-[var(--coral)] font-heading"
+            className="text-sm font-semibold block transition-colors hover:text-[var(--violet)] font-heading"
             style={{ color: 'var(--text)' }}
           >
             {displayName}
@@ -74,7 +74,7 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
             href={getExplorerUrl(RITUAL_CHAIN_CONFIG.blockExplorers?.default.url, `/address/${entry.address}`)!}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 transition-colors hover:text-[var(--coral)]"
+            className="shrink-0 transition-colors hover:text-[var(--violet)]"
             style={{ color: 'var(--text-muted)' }}
             title="View on Ritual Explorer"
             onClick={(e) => e.stopPropagation()}

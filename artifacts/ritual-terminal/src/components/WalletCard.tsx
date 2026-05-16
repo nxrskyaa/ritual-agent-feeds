@@ -36,11 +36,11 @@ export default function WalletCard({ className = '' }: WalletCardProps) {
         <div className="flex-1 min-w-0">
           <p className="tag truncate">{truncateAddress(address)}</p>
         </div>
-        <div className="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse" />
+        <div className="w-2 h-2 rounded-full bg-[var(--cyan)] animate-pulse" />
       </div>
       <div className="flex items-center gap-1.5 mb-4">
-        <Zap size={12} style={{ color: 'var(--sunshine)' }} />
-        <p className="tag" style={{ color: 'var(--mint)' }}>Ritual Testnet</p>
+        <Zap size={12} style={{ color: 'var(--pink)' }} />
+        <p className="tag" style={{ color: 'var(--cyan)' }}>Ritual Testnet</p>
       </div>
       <button onClick={disconnect} className="btn-ghost w-full text-xs py-2 flex items-center justify-center gap-1.5">
         <LogOut size={13} />
@@ -58,7 +58,7 @@ export function ConnectButton({ className = '' }: { className?: string }) {
       <div className={`flex items-center gap-2 glass rounded-full px-3 py-1.5 ${className}`}>
         <div className="w-5 h-5 rounded-lg" style={{ background: getAddressGradient(address) }} />
         <span className="tag">{truncateAddress(address)}</span>
-        <div className="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
       </div>
     )
   }
