@@ -3,7 +3,7 @@ import { ExternalLink, Twitter, Heart, Sparkles } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="w-full glass border-t border-[var(--border)] mt-20">
+    <footer className="w-full bg-[var(--bg)] border-t border-[var(--border)] mt-20 relative z-10">
       <div className="max-w-6xl mx-auto px-4 md:px-8 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>

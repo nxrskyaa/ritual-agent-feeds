@@ -10,6 +10,7 @@ import ToastNotification from '@/components/ToastNotification'
 import ProfileModal from '@/components/ProfileModal'
 import SettingsModal from '@/components/SettingsModal'
 import WalletCard from '@/components/WalletCard'
+import Footer from '@/components/Footer'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { generateId } from '@/lib/utils'
@@ -234,6 +235,7 @@ export default function Feed() {
       <ToastNotification toasts={toasts} onRemove={removeToast} />
       <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} address={profileAddress} entries={entries} />
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <Footer />
     </div>
   )
 }
