@@ -24,7 +24,7 @@ export default function RightStatsPanel() {
 
       <div className="flex flex-col gap-3 mb-6">
         {statCards.map((stat) => (
-          <div key={stat.label} className="card p-4" style={{ borderLeft: `3px solid ${stat.color}` }}>
+          <div key={stat.label} className="card-static p-4" style={{ borderLeft: `3px solid ${stat.color}` }}>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: stat.bg }}>
                 <stat.icon size={15} style={{ color: stat.color }} />
@@ -38,7 +38,7 @@ export default function RightStatsPanel() {
         ))}
       </div>
 
-      <div className="card p-4" style={{ borderLeft: '3px solid var(--mint)' }}>
+      <div className="card-static p-4" style={{ borderLeft: '3px solid var(--mint)' }}>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse" />
           <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Online</span>
@@ -47,7 +47,7 @@ export default function RightStatsPanel() {
       </div>
 
       <div className="mt-auto pt-6">
-        <div className="card p-4 text-center">
+        <div className="card-static p-4 text-center">
           <p className="tag mb-2">Fun Fact</p>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             This feed lives on the blockchain forever. Your message is now immortal.

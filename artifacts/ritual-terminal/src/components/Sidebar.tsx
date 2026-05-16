@@ -22,6 +22,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
 
   return (
     <aside className="hidden lg:flex flex-col w-[260px] h-screen sticky top-0 glass border-r border-[var(--border)] p-5">
+      {/* Brand */}
       <div className="mb-8">
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="w-7 h-7 flex items-center justify-center rounded-lg group-hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
@@ -32,23 +33,24 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
         <p className="tag mt-1 ml-10">Agent Terminal</p>
       </div>
 
+      {/* Nav */}
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
           const isActive = !item.external && location.pathname === item.href
           return item.external ? (
-            <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200" style={{ color: 'var(--text-secondary)' }}>
+            <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="sidebar-link">
               <item.icon size={17} />
               {item.label}
             </a>
           ) : (
-            <Link key={item.label} to={item.href} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 font-medium" style={{ color: isActive ? 'var(--coral)' : 'var(--text-secondary)', background: isActive ? 'var(--coral-soft)' : 'transparent' }}>
+            <Link key={item.label} to={item.href} className={`sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}>
               <item.icon size={17} />
               {item.label}
             </Link>
           )
         })}
 
-        <button onClick={onSettingsClick} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 w-full text-left" style={{ color: 'var(--text-secondary)' }}>
+        <button onClick={onSettingsClick} className="sidebar-link">
           <Settings size={17} />
           Settings
         </button>
@@ -56,8 +58,9 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
 
       <div className="flex-1" />
 
+      {/* Profile */}
       {isConnected && address && (
-        <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card">
+        <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card-static">
           <div className="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: getAddressGradient(address), color: '#fff' }}>
             {(displayName?.[0] || address[2]).toUpperCase()}
           </div>

@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --bg: #0c0c1d;
-    --bg-elevated: #121230;
+    --bg: #0a0a14;
+    --bg-elevated: #11111f;
     --surface: rgba(255,255,255,0.04);
     --surface-hover: rgba(255,255,255,0.07);
     --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,123,114,0.25);
-    
+    --border-hover: rgba(255,123,114,0.35);
+
     --coral: #ff7b72;
     --coral-soft: rgba(255,123,114,0.12);
     --mint: #7ee787;
@@ -19,18 +19,18 @@
     --lavender-soft: rgba(210,180,255,0.12);
     --sunshine: #ffd166;
     --sunshine-soft: rgba(255,209,102,0.12);
-    
+
     --text: #f0e6d3;
     --text-secondary: #9b94b0;
     --text-muted: #6b6680;
-    
-    --radius: 1rem;
+
+    --radius: 16px;
   }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -40,12 +40,8 @@
     color: #fff;
   }
 
-  ::-webkit-scrollbar {
-    width: 4px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--coral), var(--lavender));
     border-radius: 99px;
@@ -53,70 +49,158 @@
 }
 
 @layer components {
+  /* Card — solid, clean, no blur */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
   .card:hover {
     background: var(--surface-hover);
     border-color: var(--border-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   }
 
-  .glass {
-    background: rgba(12,12,29,0.8);
+  /* Static card — no hover transform */
+  .card-static {
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
   }
 
+  /* Glass — only for nav bars, NOT for cards with text */
+  .glass {
+    background: rgba(10,10,20,0.85);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  /* Primary button — coral gradient pill */
   .btn {
-    background: linear-gradient(135deg, var(--coral), var(--lavender));
+    background: linear-gradient(135deg, var(--coral), #e85d55);
     color: #fff;
     border-radius: 999px;
     font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    transition: all 0.3s ease;
+    padding: 0.625rem 1.25rem;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.4rem;
     cursor: pointer;
     border: none;
     font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
   }
   .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255,123,114,0.25);
-    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(255,123,114,0.3);
+    filter: brightness(1.08);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    filter: none;
   }
 
+  /* Ghost button — outlined */
   .btn-ghost {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text);
     border-radius: 999px;
     font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    transition: all 0.3s ease;
+    padding: 0.625rem 1.25rem;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.4rem;
     cursor: pointer;
     font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
   }
   .btn-ghost:hover {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.04);
     border-color: var(--border-hover);
   }
 
+  /* Tag / label — mono small caps */
   .tag {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Accent tag colors */
+  .tag-coral { color: var(--coral); }
+  .tag-mint { color: var(--mint); }
+  .tag-lavender { color: var(--lavender); }
+  .tag-sunshine { color: var(--sunshine); }
+
+  /* Input base */
+  .input {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
+    width: 100%;
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--border-hover);
+  }
+  .input::placeholder {
+    color: var(--text-muted);
+  }
+
+  /* Nav link */
+  .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+  .nav-link:hover {
     color: var(--coral);
+    background: var(--coral-soft);
+  }
+  .nav-link-active {
+    color: var(--coral);
+    background: var(--coral-soft);
+  }
+
+  /* Sidebar link */
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+  .sidebar-link:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+  .sidebar-link-active {
+    color: var(--coral);
+    background: var(--coral-soft);
+    font-weight: 500;
   }
 }

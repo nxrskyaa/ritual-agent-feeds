@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { X, Edit2, Check, ExternalLink, MessageCircle, Hash } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress, timeAgo, getExplorerUrl } from '@/lib/utils'
@@ -57,14 +57,14 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
           className="fixed inset-0 z-[200] flex items-center justify-center p-4"
           onClick={onClose}
         >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/60" />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            className="terminal-card grain-overlay relative w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col"
+            transition={{ duration: 0.25 }}
+            className="card relative w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col"
             style={{ border: '1px solid rgba(255,123,114,0.15)' }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -74,7 +74,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 rounded-full transition-colors hover:bg-white/5 z-10 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              className="absolute top-4 right-4 p-1.5 rounded-full transition-colors hover:bg-white/5 z-10 text-[var(--text-muted)] hover:text-[var(--text)]"
             >
               <X size={18} />
             </button>
@@ -85,11 +85,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               <div className="flex justify-center mb-4">
                 <div
                   className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold"
-                  style={{
-                    background: getAddressGradient(address),
-                    color: '#fff',
-                    boxShadow: '0 8px 30px rgba(255,123,114,0.15)',
-                  }}
+                  style={{ background: getAddressGradient(address), color: '#fff' }}
                 >
                   {(profile?.name?.[0] || address[2]).toUpperCase()}
                 </div>
@@ -104,7 +100,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                     onChange={(e) => setEditName(e.target.value)}
                     placeholder="Your display name..."
                     autoFocus
-                    className="w-full bg-[rgba(255,255,255,0.03)] border rounded-xl p-3 text-sm text-[var(--text-primary)] border-[var(--terminal-border)] focus:border-[var(--coral)] focus:outline-none transition-colors"
+                    className="input"
                     maxLength={20}
                     onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                   />
@@ -113,30 +109,30 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                     value={editBio}
                     onChange={(e) => setEditBio(e.target.value)}
                     placeholder="Short bio (optional)..."
-                    className="w-full bg-[rgba(255,255,255,0.03)] border rounded-xl p-3 text-sm text-[var(--text-primary)] border-[var(--terminal-border)] focus:border-[var(--coral)] focus:outline-none transition-colors"
+                    className="input"
                     maxLength={60}
                     onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                   />
                   <div className="flex gap-2">
-                    <button onClick={handleSave} className="terminal-btn text-xs py-2 px-4 flex items-center gap-1">
+                    <button onClick={handleSave} className="btn text-xs py-2 px-4 flex items-center gap-1">
                       <Check size={12} /> Save
                     </button>
-                    <button onClick={() => setIsEditing(false)} className="terminal-btn-ghost text-xs py-2 px-4">
+                    <button onClick={() => setIsEditing(false)} className="btn-ghost text-xs py-2 px-4">
                       Cancel
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="text-center mb-4 relative">
-                  <h2 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+                  <h2 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>
                     {displayName}
                   </h2>
                   {profile?.bio && (
-                    <p className="text-sm mt-1 text-[var(--text-secondary)]">
+                    <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
                       {profile.bio}
                     </p>
                   )}
-                  <p className="font-mono-label text-xs mt-1 text-[var(--text-muted)]">{truncateAddress(address)}</p>
+                  <p className="tag mt-1">{truncateAddress(address)}</p>
                   <button
                     onClick={startEdit}
                     className="absolute -right-1 top-0 p-1.5 rounded-full transition-colors hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--coral)]"
@@ -151,21 +147,21 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               <div className="flex justify-center gap-8 mb-6">
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1">
-                    <MessageCircle size={14} className="text-[var(--coral)]" />
-                    <span className="font-heading text-lg font-bold text-[var(--text-primary)]">
+                    <MessageCircle size={14} style={{ color: 'var(--coral)' }} />
+                    <span className="font-heading text-lg font-bold" style={{ color: 'var(--text)' }}>
                       {userEntries.length}
                     </span>
                   </div>
-                  <p className="caption-text">Posts</p>
+                  <p className="tag">Posts</p>
                 </div>
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1">
-                    <Hash size={14} className="text-[var(--lavender)]" />
-                    <span className="font-heading text-lg font-bold text-[var(--text-primary)]">
+                    <Hash size={14} style={{ color: 'var(--lavender)' }} />
+                    <span className="font-heading text-lg font-bold" style={{ color: 'var(--text)' }}>
                       #{address.slice(2, 6).toUpperCase()}
                     </span>
                   </div>
-                  <p className="caption-text">ID</p>
+                  <p className="tag">ID</p>
                 </div>
               </div>
 
@@ -175,7 +171,7 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                   href={getExplorerUrl(RITUAL_CHAIN_CONFIG.blockExplorers?.default.url, `/address/${address}`)!}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="terminal-btn-mint w-full text-xs flex items-center justify-center gap-2 mb-6"
+                  className="btn-ghost w-full text-xs flex items-center justify-center gap-2 mb-6"
                 >
                   <ExternalLink size={12} />
                   View on Ritual Explorer
@@ -183,15 +179,15 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
               )}
 
               {/* Divider */}
-              <div className="h-px w-full mb-4 bg-gradient-to-r from-transparent via-[var(--terminal-border)] to-transparent" />
+              <div className="h-px w-full mb-4" style={{ background: 'linear-gradient(90deg, transparent, var(--border), transparent)' }} />
 
               {/* Posts list */}
-              <h3 className="font-heading text-sm font-semibold mb-3 text-[var(--text-secondary)]">
+              <h3 className="font-heading text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>
                 Posts ({userEntries.length})
               </h3>
 
               {userEntries.length === 0 ? (
-                <p className="text-sm text-center py-4 text-[var(--text-muted)]">
+                <p className="text-sm text-center py-4" style={{ color: 'var(--text-muted)' }}>
                   No posts yet — time to make some noise!
                 </p>
               ) : (
@@ -199,13 +195,13 @@ export default function ProfileModal({ isOpen, onClose, address, entries }: Prof
                   {userEntries.map((entry) => (
                     <div
                       key={entry.id}
-                      className="terminal-card grain-overlay p-3"
+                      className="card-static p-3"
                       style={{ borderLeft: '3px solid var(--coral)' }}
                     >
-                      <p className="text-sm text-[var(--text-primary)]">
+                      <p className="text-sm" style={{ color: 'var(--text)' }}>
                         {entry.message}
                       </p>
-                      <span className="caption-text mt-2 block">{timeAgo(entry.timestamp)}</span>
+                      <span className="tag mt-2 block">{timeAgo(entry.timestamp)}</span>
                     </div>
                   ))}
                 </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Radio, Clock } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
 import Sidebar from '@/components/Sidebar'
@@ -142,17 +141,18 @@ export default function Feed() {
       />
 
       <main className="flex-1 min-w-0 flex flex-col">
+        {/* Mobile nav */}
         <div className="lg:hidden">
           <Navigation />
         </div>
 
-        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 pt-20 lg:pt-8">
+        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 pt-20 lg:pt-6">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-                  <Radio size={16} style={{ color: 'var(--coral)' }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.15), rgba(210,180,255,0.15))' }}>
+                  <Radio size={16} className="text-[var(--coral)]" />
                 </div>
                 <h1 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>The Feed</h1>
               </div>
@@ -169,12 +169,14 @@ export default function Feed() {
                 </span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
+          {/* Mobile wallet card */}
           <div className="lg:hidden mb-6">
             <WalletCard />
           </div>
 
+          {/* Composer */}
           <MessageComposer
             walletConnected={isConnected}
             walletAddress={address}
@@ -183,8 +185,9 @@ export default function Feed() {
             connectWallet={handleConnect}
           />
 
+          {/* Feed entries — NO AnimatePresence, plain div list */}
           {entries.length === 0 && lastUpdated === null ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="card p-6 animate-pulse">
                   <div className="flex items-start gap-3">
@@ -202,22 +205,20 @@ export default function Feed() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card p-12 text-center">
+            <div className="card p-12 text-center">
               <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
               <p className="tag">Be the pioneer. Drop the first message.</p>
-            </motion.div>
+            </div>
           ) : (
             <div className="flex flex-col gap-3">
-              <AnimatePresence initial={false}>
-                {entries.map((entry) => (
-                  <FeedEntry
-                    key={entry.id}
-                    entry={entry}
-                    isNew={newEntryIds.has(entry.id)}
-                    onViewProfile={handleViewProfile}
-                  />
-                ))}
-              </AnimatePresence>
+              {entries.map((entry) => (
+                <FeedEntry
+                  key={entry.id}
+                  entry={entry}
+                  isNew={newEntryIds.has(entry.id)}
+                  onViewProfile={handleViewProfile}
+                />
+              ))}
             </div>
           )}
         </div>

@@ -1,7 +1,5 @@
 import { useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Loader2, Check, Send, Wallet, Terminal } from 'lucide-react'
-import { useRotatingPlaceholder } from '@/hooks/useRotatingPlaceholder'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { FEED_PLACEHOLDERS, MAX_MESSAGE_LENGTH } from '@/lib/constants'
 import type { Toast, FeedEntry } from '@/types'
@@ -25,11 +23,13 @@ export default function MessageComposer({
   const [message, setMessage] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
   const { postMessage, isPosting } = useAgentFeed()
-  const { placeholder, isVisible } = useRotatingPlaceholder(FEED_PLACEHOLDERS, 4000)
 
   const charCount = message.length
   const isOverLimit = charCount > MAX_MESSAGE_LENGTH
   const canSubmit = walletConnected && message.trim().length > 0 && !isOverLimit && !isPosting
+
+  // Static placeholder — no rotation, no AnimatePresence, no flicker
+  const placeholder = FEED_PLACEHOLDERS[0]
 
   const handleSubmit = useCallback(async () => {
     if (!canSubmit) return
@@ -60,55 +60,41 @@ export default function MessageComposer({
   }, [canSubmit, walletConnected, walletAddress, connectWallet, message, postMessage, onSubmit, onToast])
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.5 }}
-      id="compose"
-      className="card p-5 md:p-6 mb-8"
-      style={{ border: '1px solid rgba(255,123,114,0.15)' }}
-    >
+    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(255,123,114,0.12)' }}>
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.2), rgba(210,180,255,0.2))' }}>
-            <Terminal size={13} style={{ color: 'var(--coral)' }} />
+          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.15), rgba(210,180,255,0.15))' }}>
+            <Terminal size={13} className="text-[var(--coral)]" />
           </div>
-          <h3 className="font-heading text-base font-semibold" style={{ color: 'var(--text)' }}>Compose</h3>
+          <h3 className="font-heading text-sm font-semibold" style={{ color: 'var(--text)' }}>Compose</h3>
         </div>
-        <span className={`tag ${isOverLimit ? 'text-[var(--error)]' : ''}`} style={{ color: isOverLimit ? 'var(--error)' : 'var(--text-muted)' }}>
+        <span className="tag" style={{ color: isOverLimit ? 'var(--coral)' : 'var(--text-muted)' }}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
 
+      {/* Textarea */}
       <div className="relative">
-        <AnimatePresence mode="wait">
-          {!message && (
-            <motion.div
-              key={placeholder}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isVisible ? 1 : 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute top-3.5 left-4 pointer-events-none text-sm font-light"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {placeholder}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {!message && (
+          <div
+            className="absolute top-3 left-4 pointer-events-none text-sm"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            {placeholder}
+          </div>
+        )}
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full min-h-[100px] rounded-xl p-3.5 text-sm resize-vertical focus:outline-none transition-all duration-200"
+          className="w-full min-h-[100px] rounded-xl p-3.5 text-sm resize-y focus:outline-none transition-colors duration-200"
           style={{
             background: 'rgba(255,255,255,0.03)',
             color: 'var(--text)',
             border: `1px solid ${isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'}`,
           }}
           onFocus={(e) => {
-            if (!isOverLimit) {
-              e.currentTarget.style.borderColor = 'rgba(255,123,114,0.3)'
-            }
+            if (!isOverLimit) e.currentTarget.style.borderColor = 'rgba(255,123,114,0.25)'
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor = isOverLimit ? 'rgba(255,123,114,0.4)' : 'rgba(255,255,255,0.06)'
@@ -116,6 +102,7 @@ export default function MessageComposer({
         />
       </div>
 
+      {/* Submit button */}
       <div className="flex items-center justify-end mt-4">
         {!walletConnected ? (
           <button onClick={connectWallet} className="btn text-sm py-2 px-5 flex items-center gap-2">
@@ -134,6 +121,6 @@ export default function MessageComposer({
           </button>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
