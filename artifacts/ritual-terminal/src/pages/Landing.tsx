@@ -46,7 +46,7 @@ export default function Landing() {
               </div>
 
               {/* Headline */}
-              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 text-glow">
                 <span style={{ color: 'var(--text)' }}>The </span>
                 <span style={{ color: 'var(--violet)' }}>Agent</span>
                 <br />
@@ -98,7 +98,7 @@ export default function Landing() {
 
               {/* Mockup card */}
               <div
-                className="relative rounded-2xl p-1"
+                className="relative rounded-2xl p-1 border-glow"
                 style={{
                   background: 'linear-gradient(135deg, rgba(139,92,246,0.3), rgba(34,211,238,0.15), rgba(167,139,250,0.2))',
                 }}
@@ -169,7 +169,7 @@ export default function Landing() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {features.map((f) => (
-              <GlassCard key={f.title} className="p-6">
+              <GlassCard key={f.title} className="p-6 border-glow">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}15` }}>
                   <f.icon size={24} style={{ color: f.color }} />
                 </div>

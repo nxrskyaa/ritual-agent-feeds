@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Radio, Clock } from 'lucide-react'
+import { Radio } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
 import Sidebar from '@/components/Sidebar'
 import RightStatsPanel from '@/components/RightStatsPanel'
@@ -24,11 +24,10 @@ export default function Feed() {
   const [profileOpen, setProfileOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [newEntryIds, setNewEntryIds] = useState<Set<string>>(new Set())
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-  const [countdown, setCountdown] = useState(POLL_INTERVAL / 1000)
+  const [isLive, setIsLive] = useState(false)
 
   const knownIdsRef = useRef<Set<string>>(new Set())
-  const lastPollRef = useRef<number>(Date.now())
+  const countdownRef = useRef<HTMLSpanElement>(null)
 
   const { getMessages } = useAgentFeed()
   const { address, isConnected, connect } = useWalletAddress()
@@ -66,9 +65,7 @@ export default function Feed() {
         return sorted
       })
 
-      setLastUpdated(new Date())
-      lastPollRef.current = Date.now()
-      setCountdown(POLL_INTERVAL / 1000)
+      setIsLive(true)
     } catch {
       // silent fail
     }
@@ -80,12 +77,23 @@ export default function Feed() {
     return () => clearInterval(interval)
   }, [loadMessages])
 
+  // Countdown via ref (NO React state = NO re-render flicker)
   useEffect(() => {
+    let lastPoll = Date.now()
     const tick = setInterval(() => {
-      const elapsed = (Date.now() - lastPollRef.current) / 1000
-      setCountdown(Math.max(0, Math.round(POLL_INTERVAL / 1000 - elapsed)))
+      if (countdownRef.current) {
+        const elapsed = (Date.now() - lastPoll) / 1000
+        const remaining = Math.max(0, Math.round(POLL_INTERVAL / 1000 - elapsed))
+        countdownRef.current.textContent = remaining > 0 ? `refresh in ${remaining}s` : 'refreshing...'
+      }
     }, 1000)
-    return () => clearInterval(tick)
+    const resetTick = setInterval(() => {
+      lastPoll = Date.now()
+    }, POLL_INTERVAL)
+    return () => {
+      clearInterval(tick)
+      clearInterval(resetTick)
+    }
   }, [])
 
   const handleNewEntry = useCallback((entry: FeedEntryType) => {
@@ -151,8 +159,8 @@ export default function Feed() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(255,123,114,0.15), rgba(210,180,255,0.15))' }}>
-                  <Radio size={16} className="text-[var(--coral)]" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
+                  <Radio size={16} style={{ color: 'var(--violet)' }} />
                 </div>
                 <h1 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>The Feed</h1>
               </div>
@@ -162,10 +170,8 @@ export default function Feed() {
                   <span className="relative rounded-full h-2 w-2 bg-[var(--cyan)]" />
                 </span>
                 <span className="tag flex items-center gap-1.5">
-                  <Clock size={11} />
-                  {lastUpdated
-                    ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · refresh in ${countdown}s`
-                    : 'Warming up…'}
+                  {isLive ? 'Live · ' : 'Warming up · '}
+                  <span ref={countdownRef} />
                 </span>
               </div>
             </div>
@@ -185,8 +191,8 @@ export default function Feed() {
             connectWallet={handleConnect}
           />
 
-          {/* Feed entries — NO AnimatePresence, plain div list */}
-          {entries.length === 0 && lastUpdated === null ? (
+          {/* Feed entries */}
+          {entries.length === 0 && !isLive ? (
             <div className="flex flex-col gap-3">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="card p-6 animate-pulse">
