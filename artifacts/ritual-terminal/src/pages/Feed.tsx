@@ -136,26 +136,27 @@ export default function Feed() {
   }, [connect, handleToast])
 
   return (
-    <div className="min-h-screen relative flex">
+    <div className="min-h-screen relative flex flex-col">
       <AmbientBackground />
 
-      <Sidebar
-        onSettingsClick={() => setSettingsOpen(true)}
-        onProfileClick={() => {
-          if (address) {
-            setProfileAddress(address)
-            setProfileOpen(true)
-          }
-        }}
-      />
+      <div className="flex flex-1">
+        <Sidebar
+          onSettingsClick={() => setSettingsOpen(true)}
+          onProfileClick={() => {
+            if (address) {
+              setProfileAddress(address)
+              setProfileOpen(true)
+            }
+          }}
+        />
 
-      <main className="flex-1 min-w-0 flex flex-col">
-        {/* Mobile nav */}
-        <div className="lg:hidden">
-          <Navigation />
-        </div>
+        <main className="flex-1 min-w-0 flex flex-col">
+          {/* Mobile nav */}
+          <div className="lg:hidden">
+            <Navigation />
+          </div>
 
-        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 pt-20 lg:pt-6">
+          <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 pt-20 lg:pt-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -232,10 +233,11 @@ export default function Feed() {
       </main>
 
       <RightStatsPanel />
+      </div>
+      <Footer />
       <ToastNotification toasts={toasts} onRemove={removeToast} />
       <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} address={profileAddress} entries={entries} />
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
-      <Footer />
     </div>
   )
 }
