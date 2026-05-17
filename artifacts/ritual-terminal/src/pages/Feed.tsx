@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Radio } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
+import FloatingParticles from '@/components/FloatingParticles'
 import Sidebar from '@/components/Sidebar'
 import RightStatsPanel from '@/components/RightStatsPanel'
 import Navigation from '@/components/Navigation'
@@ -138,6 +139,7 @@ export default function Feed() {
   return (
     <div className="min-h-screen relative flex flex-col">
       <AmbientBackground />
+      <FloatingParticles />
 
       <div className="flex flex-1">
         <Sidebar

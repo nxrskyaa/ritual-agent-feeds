@@ -6,7 +6,7 @@ import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
 const navItems = [
   { icon: Radio, label: 'Feed', href: '/feed' },
-  { icon: Compass, label: 'Explorer', href: 'https://explorer.ritualchain.io', external: true },
+  { icon: Compass, label: 'Explorer', href: 'https://explorer.ritualfoundation.org', external: true },
 ]
 
 interface SidebarProps {

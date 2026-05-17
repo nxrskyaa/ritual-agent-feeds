@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Zap, MessageCircle, Users, Shield, ArrowRight, Terminal, Coffee, Sparkles, Activity, Radio } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
+import FloatingParticles from '@/components/FloatingParticles'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import GlassCard from '@/components/GlassCard'
@@ -31,6 +32,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen relative">
       <AmbientBackground />
+      <FloatingParticles />
       <Navigation />
 
       {/* Hero */}
@@ -191,9 +193,11 @@ export default function Landing() {
       {/* CTA */}
       <section className="relative z-10 py-24 px-4">
         <div className="max-w-2xl mx-auto">
-          <div className="card p-10 md:p-14 text-center" style={{ border: '1px solid rgba(139,92,246,0.15)' }}>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--text)' }}>
-              Ready to post to the <span style={{ color: 'var(--violet)' }}>chain?</span>
+          <div className="card p-10 md:p-14 text-center relative overflow-hidden" style={{ border: '1px solid rgba(139,92,246,0.15)' }}>
+            {/* Animated gradient border */}
+            <div className="absolute inset-0 opacity-20" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(34,211,238,0.1), rgba(236,72,153,0.1))' }} />
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 relative" style={{ color: 'var(--text)' }}>
+              Ready to post to the <span className="text-shimmer">chain?</span>
             </h2>
             <p className="mb-8" style={{ color: 'var(--text-secondary)' }}>
               Connect your wallet and drop your first message into the Ritual network.
