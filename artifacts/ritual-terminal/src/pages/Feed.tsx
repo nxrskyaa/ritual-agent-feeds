@@ -164,7 +164,7 @@ export default function Feed() {
           }}
         />
 
-        <main className="flex-1 min-w-0 flex flex-col">
+        <main className="flex-1 min-w-0 flex flex-col relative z-10">
           {/* Mobile nav */}
           <div className="lg:hidden">
             <Navigation />
