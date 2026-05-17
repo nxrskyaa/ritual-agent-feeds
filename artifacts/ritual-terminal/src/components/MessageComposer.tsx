@@ -4,6 +4,7 @@ import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { FEED_PLACEHOLDERS, MAX_MESSAGE_LENGTH } from '@/lib/constants'
 import type { Toast, FeedEntry } from '@/types'
 import { generateId } from '@/lib/utils'
+import ParticleButton from './ParticleButton'
 
 interface MessageComposerProps {
   walletConnected: boolean
@@ -61,7 +62,7 @@ export default function MessageComposer({
   }, [canSubmit, message, postMessage, onSubmit, onToast])
 
   return (
-    <div className="card p-5 mb-6 composer-glow" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
+    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -106,19 +107,18 @@ export default function MessageComposer({
       {/* Submit button */}
       <div className="flex items-center justify-end mt-4">
         {!walletConnected ? (
-          <button
+          <ParticleButton
             onClick={handleConnectClick}
             disabled={isConnecting}
-            className="btn-playful text-sm py-2.5 px-6 flex items-center gap-2"
           >
             {isConnecting ? (
               <><Loader2 size={14} className="animate-spin" /> Connecting...</>
             ) : (
               <><Wallet size={14} className="btn-icon" /> Connect to Post</>
             )}
-          </button>
+          </ParticleButton>
         ) : (
-          <button onClick={handleSubmit} disabled={!canSubmit} className="btn-playful text-sm py-2.5 px-6 flex items-center gap-2">
+          <ParticleButton onClick={handleSubmit} disabled={!canSubmit}>
             {isPosting ? (
               <><Loader2 size={14} className="animate-spin" /> Sending...</>
             ) : showSuccess ? (
@@ -126,7 +126,7 @@ export default function MessageComposer({
             ) : (
               <><Send size={14} className="btn-icon" /> Post Message</>
             )}
-          </button>
+          </ParticleButton>
         )}
       </div>
     </div>

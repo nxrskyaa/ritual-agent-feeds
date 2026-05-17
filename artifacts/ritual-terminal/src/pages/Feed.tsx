@@ -201,9 +201,9 @@ export default function Feed() {
           {entries.length === 0 && !isLive ? (
             <div className="flex flex-col gap-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="card p-6 animate-pulse scanner">
+                <div key={i} className="card p-6 animate-pulse">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/5 morph-blob" />
+                    <div className="w-10 h-10 rounded-full bg-white/5" />
                     <div className="flex-1 space-y-2">
                       <div className="h-3 bg-white/5 rounded w-1/3" />
                       <div className="h-3 bg-white/5 rounded w-1/4" />
@@ -217,7 +217,7 @@ export default function Feed() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <div className="card p-12 text-center floating-orb ghost-float">
+            <div className="card p-12 text-center">
               <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
               <p className="tag typing-cursor">Be the pioneer. Drop the first message.</p>
             </div>

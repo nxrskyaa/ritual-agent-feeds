@@ -57,7 +57,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
       {/* Profile */}
       {isConnected && address && (
         <div className="flex flex-col gap-2">
-          <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card-static rainbow-glow confetti-hover">
+          <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card-static">
             {avatarUrl ? (
               <img src={avatarUrl} alt="" className="w-9 h-9 rounded-xl shrink-0 object-cover border border-[var(--border)]" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
             ) : (

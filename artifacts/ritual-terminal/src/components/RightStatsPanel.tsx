@@ -24,7 +24,7 @@ export default function RightStatsPanel() {
 
       <div className="flex flex-col gap-3 mb-6 stagger">
         {statCards.map((stat) => (
-          <div key={stat.label} className="card-static p-4 scanner magnetic-pull" style={{ borderLeft: `3px solid ${stat.color}` }}>
+          <div key={stat.label} className="card-static p-4 magnetic-pull" style={{ borderLeft: `3px solid ${stat.color}` }}>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: stat.bg }}>
                 <stat.icon size={15} style={{ color: stat.color }} className="animate-bounce-soft" />
@@ -38,7 +38,7 @@ export default function RightStatsPanel() {
         ))}
       </div>
 
-      <div className="card-static p-4 pulse-glow" style={{ borderLeft: '3px solid var(--cyan)' }}>
+      <div className="card-static p-4" style={{ borderLeft: '3px solid var(--cyan)' }}>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-[var(--cyan)] animate-pulse" />
           <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Online</span>
