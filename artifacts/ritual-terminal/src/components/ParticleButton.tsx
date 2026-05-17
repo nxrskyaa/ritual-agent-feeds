@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 
 interface ParticleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
-  variant?: 'primary' | 'success' | 'ghost'
 }
 
 const particles = [
@@ -16,49 +15,33 @@ const particles = [
   { tx: -15, ty: -30, color: '#a78bfa', size: 4, delay: 0.07, dur: 0.6 },
 ]
 
-export default function ParticleButton({ children, variant = 'primary', className = '', ...props }: ParticleButtonProps) {
-  const [hovered, setHovered] = useState(false)
+export default function ParticleButton({ children, className = '', ...props }: ParticleButtonProps) {
   const [burst, setBurst] = useState(false)
 
-  const handleMouseEnter = useCallback(() => setHovered(true), [])
-  const handleMouseLeave = useCallback(() => {
-    setHovered(false)
-    setBurst(false)
-  }, [])
   const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     setBurst(true)
     setTimeout(() => setBurst(false), 600)
     props.onClick?.(e)
   }, [props])
 
-  const baseClass = variant === 'primary'
-    ? 'btn-playful'
-    : variant === 'success'
-    ? 'btn-playful btn-playful-success'
-    : 'btn-playful btn-playful-ghost'
-
   return (
-    <span
-      className="relative inline-block"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <span className="relative inline-block">
       <button
         {...props}
         onClick={handleClick}
-        className={`${baseClass} ${className}`}
+        className={`btn-playful ${className}`}
       >
         {children}
       </button>
 
-      {/* Burst particles on click — actual DOM elements, pointer-events:none */}
+      {/* Burst particles on click — actual DOM elements, pointer-events:none, positioned outside button */}
       {burst && particles.map((p, i) => (
         <span
           key={`burst-${i}`}
           className="particle-dot"
           style={{
             left: '50%',
-            top: '50%',
+            top: '40%',
             width: p.size,
             height: p.size,
             background: p.color,
@@ -69,17 +52,6 @@ export default function ParticleButton({ children, variant = 'primary', classNam
           }}
         />
       ))}
-
-      {/* Hover glow ring — actual DOM element */}
-      {hovered && (
-        <span
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            boxShadow: '0 0 20px rgba(139,92,246,0.3), 0 0 40px rgba(139,92,246,0.15)',
-            animation: 'glow-ring-pulse 1.5s ease-in-out infinite',
-          }}
-        />
-      )}
     </span>
   )
 }
