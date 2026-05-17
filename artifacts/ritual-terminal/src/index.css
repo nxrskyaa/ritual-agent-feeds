@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CRITICAL: Prevent ALL pseudo-elements from capturing mouse events.
-   This fixes cursor flickering when hovering over buttons/cards with ::before/::after effects. */
-::before, ::after {
-  pointer-events: none;
-}
-
 @layer base {
   :root {
     --bg: #08060e;

@@ -53,7 +53,18 @@ export default function Feed() {
         (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       )
 
-      setEntries(() => {
+      setEntries((prev) => {
+        // Merge: preserve existing entry objects to prevent React re-render flicker
+        const prevMap = new Map(prev.map((e) => [e.id, e]))
+        const merged = sorted.map((msg) => {
+          const existing = prevMap.get(msg.id)
+          // Only replace if status changed (e.g., pending → confirmed)
+          if (existing && existing.status === msg.status) {
+            return existing
+          }
+          return msg
+        })
+
         const incomingIds = new Set(sorted.map((m) => m.id))
         const genuinelyNew = sorted
           .filter((m) => !knownIdsRef.current.has(m.id))
@@ -64,7 +75,7 @@ export default function Feed() {
         }
 
         knownIdsRef.current = incomingIds
-        return sorted
+        return merged
       })
 
       setIsLive(true)

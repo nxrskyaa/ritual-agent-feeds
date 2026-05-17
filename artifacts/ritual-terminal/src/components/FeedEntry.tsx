@@ -31,7 +31,7 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
     : undefined
 
   return (
-    <div className={`card p-5 ${isNew ? 'scanner' : ''}`} style={cardStyle}>
+    <div className="card p-5" style={cardStyle}>
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <button
