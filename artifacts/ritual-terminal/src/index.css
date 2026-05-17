@@ -6,10 +6,10 @@
   :root {
     --bg: #08060e;
     --bg-elevated: #0f0d18;
-    --surface: rgba(255,255,255,0.055);
-    --surface-hover: rgba(255,255,255,0.09);
-    --border: rgba(255,255,255,0.10);
-    --border-hover: rgba(139,92,246,0.35);
+    --surface: rgba(255,255,255,0.08);
+    --surface-hover: rgba(255,255,255,0.13);
+    --border: rgba(255,255,255,0.14);
+    --border-hover: rgba(139,92,246,0.45);
 
     --violet: #8b5cf6;
     --violet-soft: rgba(139,92,246,0.12);
@@ -56,6 +56,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
   }
   .card:hover {
     background: var(--surface-hover);
@@ -63,8 +65,8 @@
     transform: translateY(-2px);
     box-shadow:
       0 4px 24px rgba(0,0,0,0.3),
-      0 0 40px rgba(139,92,246,0.08),
-      inset 0 1px 0 rgba(255,255,255,0.04);
+      0 0 40px rgba(139,92,246,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
   /* Static card — no hover transform */
@@ -72,10 +74,12 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
   }
   .card-static:hover {
     border-color: var(--border-hover);
-    box-shadow: 0 0 30px rgba(139,92,246,0.06);
+    box-shadow: 0 0 30px rgba(139,92,246,0.1);
   }
 
   /* Glass nav */
