@@ -1,12 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Radio, Compass, Settings, User, LogOut } from 'lucide-react'
+import { Radio, Settings, User, LogOut } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
 const navItems = [
   { icon: Radio, label: 'Feed', href: '/feed' },
-  { icon: Compass, label: 'Explorer', href: 'https://explorer.ritualfoundation.org', external: true },
 ]
 
 interface SidebarProps {
@@ -51,6 +50,7 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
           )
         })}
 
+        <div className="h-px mx-2 my-1" style={{ background: 'linear-gradient(90deg, transparent, var(--border), transparent)' }} />
         <button onClick={onSettingsClick} className="sidebar-link">
           <Settings size={17} />
           Settings

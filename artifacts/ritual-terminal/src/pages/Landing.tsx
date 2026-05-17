@@ -55,7 +55,7 @@ export default function Landing() {
               </div>
 
               {/* Headline */}
-              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 text-glow">
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 glow-breathe">
                 <span style={{ color: 'var(--text)' }}>The </span>
                 <span className="text-shimmer">Agent</span>
                 <br />
@@ -68,12 +68,12 @@ export default function Landing() {
 
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
-                <Link to="/feed" className="btn text-base py-3.5 px-8 group">
+                <Link to="/feed" className="btn-shiny text-base py-3.5 px-8 group tada">
                   <Terminal size={18} />
                   Open Terminal
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="btn-ghost text-base py-3.5 px-8 group">
+                <a href="https://docs.ritualfoundation.org" target="_blank" rel="noopener noreferrer" className="btn-ghost text-base py-3.5 px-8 group rubber">
                   <Coffee size={16} />
                   Read Docs
                 </a>
@@ -176,13 +176,13 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger">
-            {features.map((f) => (
-              <GlassCard key={f.title} className="p-6 border-glow group">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {features.map((f, i) => (
+              <GlassCard key={f.title} className="p-6 border-glow group jello" style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bouncy" style={{ background: `${f.color}15` }}>
-                  <f.icon size={24} style={{ color: f.color }} className="group-hover:rotate-12 transition-transform duration-300" />
+                  <f.icon size={24} style={{ color: f.color }} className="group-hover:rotate-12 transition-transform duration-300 swing" />
                 </div>
-                <h3 className="font-heading text-lg font-bold mb-2 glitch-hover" style={{ color: 'var(--text)' }}>{f.title}</h3>
+                <h3 className="font-heading text-lg font-bold mb-2 wobble" style={{ color: 'var(--text)' }}>{f.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{f.desc}</p>
               </GlassCard>
             ))}
@@ -194,16 +194,17 @@ export default function Landing() {
       <section className="relative z-10 py-24 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="card p-10 md:p-14 text-center relative overflow-hidden" style={{ border: '1px solid rgba(139,92,246,0.15)' }}>
-            {/* Animated gradient border */}
             <div className="absolute inset-0 opacity-20" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(34,211,238,0.1), rgba(236,72,153,0.1))' }} />
+            <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-30" style={{ background: 'radial-gradient(circle, var(--violet), transparent)', filter: 'blur(40px)', animation: 'float-slow 5s ease-in-out infinite' }} />
+            <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--cyan), transparent)', filter: 'blur(40px)', animation: 'float-slow 7s ease-in-out infinite reverse' }} />
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 relative" style={{ color: 'var(--text)' }}>
               Ready to post to the <span className="text-shimmer">chain?</span>
             </h2>
-            <p className="mb-8" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mb-8 relative" style={{ color: 'var(--text-secondary)' }}>
               Connect your wallet and drop your first message into the Ritual network.
             </p>
-            <Link to="/feed" className="btn text-lg py-3.5 px-10 group">
-              <Sparkles size={20} />
+            <Link to="/feed" className="btn-shiny text-lg py-3.5 px-10 group tada">
+              <Sparkles size={20} className="animate-bounce-soft" />
               Launch Terminal
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
