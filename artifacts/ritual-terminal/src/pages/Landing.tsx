@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Zap, MessageCircle, Users, Shield, ArrowRight, Terminal, Coffee, Sparkles, Activity, Radio } from 'lucide-react'
 import AmbientBackground from '@/components/AmbientBackground'
-import FloatingParticles from '@/components/FloatingParticles'
+import CosmicBackground from '@/components/CosmicBackground'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import GlassCard from '@/components/GlassCard'
@@ -32,7 +32,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen relative">
       <AmbientBackground />
-      <FloatingParticles />
+      <CosmicBackground />
       <Navigation />
 
       {/* Hero */}

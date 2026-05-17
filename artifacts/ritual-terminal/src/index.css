@@ -668,6 +668,75 @@
   animation: glow-breathe 3s ease-in-out infinite;
 }
 
+/* ===== COSMIC / GALAXY ANIMATIONS ===== */
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+@keyframes orbit-slow {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, -15px) rotate(2deg); }
+  50% { transform: translate(0, -20px) rotate(0deg); }
+  75% { transform: translate(-10px, -15px) rotate(-2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes moon-orbit {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(20px, 10px); }
+  50% { transform: translate(0, 20px); }
+  75% { transform: translate(-20px, 10px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes star-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+@keyframes ray-rotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes shooting-star {
+  0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+  10% { opacity: 1; }
+  20% { transform: translateX(150px) translateY(150px) rotate(-45deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Planet hover glow enhancement */
+.planet-glow {
+  transition: all 0.5s ease;
+}
+.planet-glow:hover {
+  filter: brightness(1.3) saturate(1.2);
+}
+
+/* Cosmic card border */
+.cosmic-border {
+  position: relative;
+  overflow: hidden;
+}
+.cosmic-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, var(--violet), var(--cyan), var(--pink), var(--purple), var(--violet));
+  animation: cosmic-rotate 4s linear infinite;
+  z-index: -1;
+}
+.cosmic-border::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: var(--bg);
+  z-index: -1;
+}
+@keyframes cosmic-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Logo pulse */
 @keyframes logo-pulse {
   0%, 100% { opacity: 0.5; transform: scale(1); }
