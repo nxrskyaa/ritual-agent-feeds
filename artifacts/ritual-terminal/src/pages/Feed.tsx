@@ -32,7 +32,7 @@ export default function Feed() {
   const countdownRef = useRef<HTMLSpanElement>(null)
 
   const { getMessages } = useAgentFeed()
-  const { address, isConnected, connect } = useWalletAddress()
+  const { address, isConnected, isConnecting, connect } = useWalletAddress()
 
   const markNew = useCallback((ids: string[]) => {
     if (ids.length === 0) return
@@ -130,8 +130,9 @@ export default function Feed() {
   const handleConnect = useCallback(async (): Promise<string | null> => {
     try {
       return await connect()
-    } catch {
-      handleToast({ id: generateId(), type: 'error', message: 'Failed to connect wallet.' })
+    } catch (err: unknown) {
+      const msg = (err as Error).message || 'Failed to connect wallet.'
+      handleToast({ id: generateId(), type: 'error', message: msg })
       return null
     }
   }, [connect, handleToast])
@@ -163,17 +164,17 @@ export default function Feed() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
-                  <Radio size={16} style={{ color: 'var(--violet)' }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center orbital" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
+                  <Radio size={16} style={{ color: 'var(--violet)' }} className="animate-bounce-soft" />
                 </div>
-                <h1 className="font-heading text-xl font-bold" style={{ color: 'var(--text)' }}>The Feed</h1>
+                <h1 className="font-heading text-xl font-bold neon-flicker" style={{ color: 'var(--text)' }}>The Feed</h1>
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute h-full w-full rounded-full bg-[var(--cyan)] opacity-75" />
                   <span className="relative rounded-full h-2 w-2 bg-[var(--cyan)]" />
                 </span>
-                <span className="tag flex items-center gap-1.5">
+                <span className="tag flex items-center gap-1.5 typing-cursor">
                   {isLive ? 'Live · ' : 'Warming up · '}
                   <span ref={countdownRef} />
                 </span>
@@ -190,6 +191,7 @@ export default function Feed() {
           <MessageComposer
             walletConnected={isConnected}
             walletAddress={address}
+            isConnecting={isConnecting}
             onSubmit={handleNewEntry}
             onToast={handleToast}
             connectWallet={handleConnect}
@@ -199,9 +201,9 @@ export default function Feed() {
           {entries.length === 0 && !isLive ? (
             <div className="flex flex-col gap-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="card p-6 animate-pulse">
+                <div key={i} className="card p-6 animate-pulse scanner">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/5" />
+                    <div className="w-10 h-10 rounded-full bg-white/5 morph-blob" />
                     <div className="flex-1 space-y-2">
                       <div className="h-3 bg-white/5 rounded w-1/3" />
                       <div className="h-3 bg-white/5 rounded w-1/4" />
@@ -215,9 +217,9 @@ export default function Feed() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <div className="card p-12 text-center">
+            <div className="card p-12 text-center floating-orb">
               <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
-              <p className="tag">Be the pioneer. Drop the first message.</p>
+              <p className="tag typing-cursor">Be the pioneer. Drop the first message.</p>
             </div>
           ) : (
             <div className="flex flex-col gap-3">

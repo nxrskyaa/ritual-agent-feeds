@@ -22,12 +22,12 @@ export default function RightStatsPanel() {
         <p className="tag">Real-time stats from Ritual</p>
       </div>
 
-      <div className="flex flex-col gap-3 mb-6">
+      <div className="flex flex-col gap-3 mb-6 stagger">
         {statCards.map((stat) => (
-          <div key={stat.label} className="card-static p-4" style={{ borderLeft: `3px solid ${stat.color}` }}>
+          <div key={stat.label} className="card-static p-4 scanner" style={{ borderLeft: `3px solid ${stat.color}` }}>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: stat.bg }}>
-                <stat.icon size={15} style={{ color: stat.color }} />
+                <stat.icon size={15} style={{ color: stat.color }} className="animate-bounce-soft" />
               </div>
               <p className="tag">{stat.label}</p>
             </div>
@@ -38,16 +38,16 @@ export default function RightStatsPanel() {
         ))}
       </div>
 
-      <div className="card-static p-4" style={{ borderLeft: '3px solid var(--cyan)' }}>
+      <div className="card-static p-4 breathe-border" style={{ borderLeft: '3px solid var(--cyan)' }}>
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-[var(--cyan)] animate-pulse" />
           <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Online</span>
         </div>
-        <p className="tag">Ritual Testnet · Chain 1979</p>
+        <p className="tag typing-cursor">Ritual Testnet · Chain 1979</p>
       </div>
 
       <div className="mt-auto pt-6">
-        <div className="card-static p-4 text-center">
+        <div className="card-static p-4 text-center floating-orb">
           <p className="tag mb-2">Fun Fact</p>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             This feed lives on the blockchain forever. Your message is now immortal.

@@ -23,5 +23,6 @@ export function getWalletClient() {
 
 // Hook for wallet address — now reads from global store
 export function useWalletAddress() {
-  return useWalletStore()
+  const { address, isConnected, isConnecting, connect, disconnect } = useWalletStore()
+  return { address, isConnected, isConnecting, connect, disconnect }
 }

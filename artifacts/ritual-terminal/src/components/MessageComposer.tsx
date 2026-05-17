@@ -8,6 +8,7 @@ import { generateId } from '@/lib/utils'
 interface MessageComposerProps {
   walletConnected: boolean
   walletAddress: string | null
+  isConnecting: boolean
   onSubmit: (entry: FeedEntry) => void
   onToast: (toast: Toast) => void
   connectWallet: () => Promise<string | null>
@@ -16,6 +17,7 @@ interface MessageComposerProps {
 export default function MessageComposer({
   walletConnected,
   walletAddress,
+  isConnecting,
   onSubmit,
   onToast,
   connectWallet,
@@ -30,21 +32,21 @@ export default function MessageComposer({
 
   const placeholder = FEED_PLACEHOLDERS[0]
 
+  const handleConnectClick = useCallback(async () => {
+    if (isConnecting) return
+    try {
+      const addr = await connectWallet()
+      if (!addr) {
+        onToast({ id: generateId(), type: 'info', message: 'Connect your wallet to post.' })
+      }
+    } catch (err: unknown) {
+      const msg = (err as Error).message || 'Failed to connect wallet.'
+      onToast({ id: generateId(), type: 'error', message: msg })
+    }
+  }, [isConnecting, connectWallet, onToast])
+
   const handleSubmit = useCallback(async () => {
     if (!canSubmit) return
-
-    if (!walletConnected || !walletAddress) {
-      try {
-        const addr = await connectWallet()
-        if (!addr) {
-          onToast({ id: generateId(), type: 'info', message: 'Connect your wallet to post.' })
-          return
-        }
-      } catch (err: unknown) {
-        onToast({ id: generateId(), type: 'error', message: (err as Error).message || 'Failed to connect.' })
-        return
-      }
-    }
 
     try {
       const { hash, entry } = await postMessage(message.trim())
@@ -56,17 +58,17 @@ export default function MessageComposer({
     } catch (err: unknown) {
       onToast({ id: generateId(), type: 'error', message: (err as Error).message || 'Transaction failed.' })
     }
-  }, [canSubmit, walletConnected, walletAddress, connectWallet, message, postMessage, onSubmit, onToast])
+  }, [canSubmit, message, postMessage, onSubmit, onToast])
 
   return (
-    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
+    <div className="card p-5 mb-6 breathe-border" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
             <Terminal size={13} style={{ color: 'var(--violet)' }} />
           </div>
-          <h3 className="font-heading text-sm font-semibold" style={{ color: 'var(--text)' }}>Compose</h3>
+          <h3 className="font-heading text-sm font-semibold typing-cursor" style={{ color: 'var(--text)' }}>Compose</h3>
         </div>
         <span className="tag" style={{ color: isOverLimit ? 'var(--pink)' : 'var(--text-muted)' }}>
           {charCount} / {MAX_MESSAGE_LENGTH}
@@ -104,9 +106,16 @@ export default function MessageComposer({
       {/* Submit button */}
       <div className="flex items-center justify-end mt-4">
         {!walletConnected ? (
-          <button onClick={connectWallet} className="btn text-sm py-2 px-5 flex items-center gap-2">
-            <Wallet size={14} />
-            Connect to Post
+          <button
+            onClick={handleConnectClick}
+            disabled={isConnecting}
+            className="btn text-sm py-2 px-5 flex items-center gap-2"
+          >
+            {isConnecting ? (
+              <><Loader2 size={14} className="animate-spin" /> Connecting...</>
+            ) : (
+              <><Wallet size={14} /> Connect to Post</>
+            )}
           </button>
         ) : (
           <button onClick={handleSubmit} disabled={!canSubmit} className="btn text-sm py-2 px-5 flex items-center gap-2">
