@@ -55,7 +55,7 @@ export default function Landing() {
               {/* Headline */}
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 text-glow">
                 <span style={{ color: 'var(--text)' }}>The </span>
-                <span style={{ color: 'var(--violet)' }}>Agent</span>
+                <span className="text-shimmer">Agent</span>
                 <br />
                 <span style={{ color: 'var(--text)' }}>Terminal</span>
               </h1>
@@ -174,13 +174,13 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger">
             {features.map((f) => (
-              <GlassCard key={f.title} className="p-6 border-glow">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}15` }}>
-                  <f.icon size={24} style={{ color: f.color }} />
+              <GlassCard key={f.title} className="p-6 border-glow group">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bouncy" style={{ background: `${f.color}15` }}>
+                  <f.icon size={24} style={{ color: f.color }} className="group-hover:rotate-12 transition-transform duration-300" />
                 </div>
-                <h3 className="font-heading text-lg font-bold mb-2" style={{ color: 'var(--text)' }}>{f.title}</h3>
+                <h3 className="font-heading text-lg font-bold mb-2 glitch-hover" style={{ color: 'var(--text)' }}>{f.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{f.desc}</p>
               </GlassCard>
             ))}

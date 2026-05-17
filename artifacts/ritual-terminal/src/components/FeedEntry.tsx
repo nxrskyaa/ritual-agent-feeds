@@ -11,8 +11,9 @@ interface FeedEntryProps {
 }
 
 export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedEntryProps) {
-  const { getDisplayName } = useProfiles()
+  const { getDisplayName, getAvatarUrl } = useProfiles()
   const displayName = getDisplayName(entry.address)
+  const avatarUrl = getAvatarUrl(entry.address)
 
   const statusIcon =
     entry.status === 'confirmed' ? (
@@ -35,10 +36,14 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
         {/* Avatar */}
         <button
           onClick={() => onViewProfile?.(entry.address)}
-          className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold transition-transform hover:scale-110"
-          style={{ background: getAddressGradient(entry.address), color: '#fff' }}
+          className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold transition-transform hover:scale-110 overflow-hidden"
+          style={avatarUrl ? undefined : { background: getAddressGradient(entry.address), color: '#fff' }}
         >
-          {displayName[0].toUpperCase()}
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+          ) : (
+            displayName[0].toUpperCase()
+          )}
         </button>
 
         {/* Name + meta */}

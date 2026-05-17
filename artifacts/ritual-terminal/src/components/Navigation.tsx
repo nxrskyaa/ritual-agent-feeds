@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Loader2, Sparkles } from 'lucide-react'
+import { Menu, X, Loader2, Sparkles, LogOut } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
@@ -73,8 +73,9 @@ export default function Navigation() {
                 <span className="tag">{truncateAddress(address)}</span>
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
               </div>
-              <button onClick={disconnect} className="text-xs transition-colors hover:text-[var(--violet)]" style={{ color: 'var(--text-muted)' }}>
-                Exit
+              <button onClick={disconnect} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/20" style={{ color: 'var(--text-muted)' }}>
+                <LogOut size={12} />
+                Disconnect
               </button>
             </div>
           ) : (

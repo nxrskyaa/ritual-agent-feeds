@@ -4,6 +4,8 @@ export interface Profile {
   name: string
   color?: string
   bio?: string
+  xHandle?: string
+  avatarUrl?: string
 }
 
 const STORAGE_KEY = 'ritual_profiles'
@@ -38,8 +40,15 @@ export function useProfiles() {
 
   const getDisplayName = useCallback((address: string): string => {
     const p = profiles[address.toLowerCase()]
-    return p?.name || address.slice(0, 6) + '...' + address.slice(-4)
+    return p?.name || p?.xHandle || address.slice(0, 6) + '...' + address.slice(-4)
   }, [profiles])
 
-  return { profiles, getProfile, setProfile, getDisplayName }
+  const getAvatarUrl = useCallback((address: string): string | null => {
+    const p = profiles[address.toLowerCase()]
+    if (p?.avatarUrl) return p.avatarUrl
+    if (p?.xHandle) return `https://unavatar.io/x/${p.xHandle.replace('@', '')}?fallback=false`
+    return null
+  }, [profiles])
+
+  return { profiles, getProfile, setProfile, getDisplayName, getAvatarUrl }
 }

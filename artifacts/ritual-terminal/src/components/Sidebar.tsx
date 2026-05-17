@@ -1,12 +1,12 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Radio, Globe, Settings, User } from 'lucide-react'
+import { Radio, Compass, Settings, User, LogOut } from 'lucide-react'
 import { useWalletAddress } from '@/hooks/useViemClient'
 import { useProfiles } from '@/hooks/useProfiles'
 import { getAddressGradient, truncateAddress } from '@/lib/utils'
 
 const navItems = [
   { icon: Radio, label: 'Feed', href: '/feed' },
-  { icon: Globe, label: 'Explore', href: 'https://docs.ritualfoundation.org', external: true },
+  { icon: Compass, label: 'Explorer', href: 'https://explorer.ritualchain.io', external: true },
 ]
 
 interface SidebarProps {
@@ -16,9 +16,10 @@ interface SidebarProps {
 
 export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProps) {
   const location = useLocation()
-  const { address, isConnected } = useWalletAddress()
-  const { getDisplayName } = useProfiles()
+  const { address, isConnected, disconnect } = useWalletAddress()
+  const { getDisplayName, getAvatarUrl } = useProfiles()
   const displayName = address ? getDisplayName(address) : null
+  const avatarUrl = address ? getAvatarUrl(address) : null
 
   return (
     <aside className="hidden lg:flex flex-col w-[260px] h-screen sticky top-0 glass border-r border-[var(--border)] p-5">
@@ -60,16 +61,26 @@ export default function Sidebar({ onSettingsClick, onProfileClick }: SidebarProp
 
       {/* Profile */}
       {isConnected && address && (
-        <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card-static">
-          <div className="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: getAddressGradient(address), color: '#fff' }}>
-            {(displayName?.[0] || address[2]).toUpperCase()}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate leading-tight font-heading" style={{ color: 'var(--text)' }}>{displayName}</p>
-            <p className="tag truncate">{truncateAddress(address)}</p>
-          </div>
-          <User size={14} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--violet)' }} />
-        </button>
+        <div className="flex flex-col gap-2">
+          <button onClick={onProfileClick} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/5 group text-left card-static">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className="w-9 h-9 rounded-xl shrink-0 object-cover border border-[var(--border)]" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            ) : (
+              <div className="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: getAddressGradient(address), color: '#fff' }}>
+                {(displayName?.[0] || address[2]).toUpperCase()}
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate leading-tight font-heading" style={{ color: 'var(--text)' }}>{displayName}</p>
+              <p className="tag truncate">{truncateAddress(address)}</p>
+            </div>
+            <User size={14} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity bouncy" style={{ color: 'var(--violet)' }} />
+          </button>
+          <button onClick={disconnect} className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-medium transition-all duration-200 hover:bg-red-500/10 hover:text-red-400" style={{ color: 'var(--text-muted)' }}>
+            <LogOut size={13} />
+            Disconnect
+          </button>
+        </div>
       )}
     </aside>
   )
