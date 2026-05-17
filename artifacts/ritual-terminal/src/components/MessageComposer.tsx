@@ -61,7 +61,7 @@ export default function MessageComposer({
   }, [canSubmit, message, postMessage, onSubmit, onToast])
 
   return (
-    <div className="card p-5 mb-6 breathe-border" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
+    <div className="card p-5 mb-6 composer-glow" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -109,22 +109,22 @@ export default function MessageComposer({
           <button
             onClick={handleConnectClick}
             disabled={isConnecting}
-            className="btn text-sm py-2 px-5 flex items-center gap-2"
+            className="btn-playful text-sm py-2.5 px-6 flex items-center gap-2"
           >
             {isConnecting ? (
               <><Loader2 size={14} className="animate-spin" /> Connecting...</>
             ) : (
-              <><Wallet size={14} /> Connect to Post</>
+              <><Wallet size={14} className="btn-icon" /> Connect to Post</>
             )}
           </button>
         ) : (
-          <button onClick={handleSubmit} disabled={!canSubmit} className="btn text-sm py-2 px-5 flex items-center gap-2">
+          <button onClick={handleSubmit} disabled={!canSubmit} className="btn-playful text-sm py-2.5 px-6 flex items-center gap-2">
             {isPosting ? (
               <><Loader2 size={14} className="animate-spin" /> Sending...</>
             ) : showSuccess ? (
-              <><Check size={14} /> Sent!</>
+              <><Check size={14} className="pop-check" /> Sent!</>
             ) : (
-              <><Send size={14} /> Post Message</>
+              <><Send size={14} className="btn-icon" /> Post Message</>
             )}
           </button>
         )}

@@ -164,7 +164,7 @@ export default function Feed() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center orbital" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center orbital star-sparkle" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
                   <Radio size={16} style={{ color: 'var(--violet)' }} className="animate-bounce-soft" />
                 </div>
                 <h1 className="font-heading text-xl font-bold neon-flicker" style={{ color: 'var(--text)' }}>The Feed</h1>
@@ -217,7 +217,7 @@ export default function Feed() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <div className="card p-12 text-center floating-orb">
+            <div className="card p-12 text-center floating-orb ghost-float">
               <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
               <p className="tag typing-cursor">Be the pioneer. Drop the first message.</p>
             </div>

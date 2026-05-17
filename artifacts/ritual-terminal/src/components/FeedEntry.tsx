@@ -31,7 +31,7 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
     : undefined
 
   return (
-    <div className={`card p-5 ${isNew ? 'energy-pulse scanner' : ''}`} style={cardStyle}>
+    <div className={`card p-5 ${isNew ? 'energy-pulse scanner' : ''} ${entry.type === 'agent' ? 'rainbow-glow' : ''}`} style={cardStyle}>
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <button
@@ -63,7 +63,7 @@ export default function FeedEntry({ entry, isNew = false, onViewProfile }: FeedE
         </div>
 
         {/* Type badge */}
-        <div className={`rounded-lg px-2.5 py-1 flex items-center gap-1.5 shrink-0 ${entry.type === 'agent' ? 'neon-flicker' : ''}`} style={{ background: typeBg }}>
+        <div className={`rounded-lg px-2.5 py-1 flex items-center gap-1.5 shrink-0 star-sparkle ${entry.type === 'agent' ? 'neon-flicker' : ''}`} style={{ background: typeBg }}>
           <TypeIcon size={12} style={{ color: typeColor }} className={entry.type === 'agent' ? 'animate-bounce-soft' : ''} />
           <span className="tag" style={{ color: typeColor }}>
             {entry.type === 'agent' ? 'Agent' : 'Human'}
