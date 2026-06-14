@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Radio } from 'lucide-react'
-import AmbientBackground from '@/components/AmbientBackground'
-import CosmicBackground from '@/components/CosmicBackground'
+import GridBackground from '@/components/GridBackground'
 import Sidebar from '@/components/Sidebar'
 import RightStatsPanel from '@/components/RightStatsPanel'
 import Navigation from '@/components/Navigation'
@@ -150,8 +148,7 @@ export default function Feed() {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      <AmbientBackground />
-      <CosmicBackground />
+      <GridBackground />
 
       <div className="flex flex-1">
         <Sidebar
@@ -172,21 +169,19 @@ export default function Feed() {
 
           <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 pt-20 lg:pt-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b" style={{ borderColor: 'var(--line)' }}>
             <div>
-              <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center orbital star-sparkle" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
-                  <Radio size={16} style={{ color: 'var(--violet)' }} className="animate-bounce-soft" />
-                </div>
-                <h1 className="font-heading text-xl font-bold neon-flicker" style={{ color: 'var(--text)' }}>The Feed</h1>
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <span className="font-mono text-xs" style={{ color: 'var(--signal)' }}>{'>'}</span>
+                <h1 className="font-mono text-sm font-bold uppercase tracking-widest" style={{ color: 'var(--ink-display)' }}>The Feed</h1>
               </div>
               <div className="flex items-center gap-2 mt-1">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute h-full w-full rounded-full bg-[var(--cyan)] opacity-75" />
-                  <span className="relative rounded-full h-2 w-2 bg-[var(--cyan)]" />
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute h-full w-full rounded-full opacity-75" style={{ background: 'var(--signal)' }} />
+                  <span className="relative rounded-full h-1.5 w-1.5" style={{ background: 'var(--signal)' }} />
                 </span>
-                <span className="tag flex items-center gap-1.5 typing-cursor">
-                  {isLive ? 'Live · ' : 'Warming up · '}
+                <span className="tag flex items-center gap-1.5">
+                  {isLive ? 'LIVE · ' : 'WARMING UP · '}
                   <span ref={countdownRef} />
                 </span>
               </div>
@@ -212,24 +207,24 @@ export default function Feed() {
           {entries.length === 0 && !isLive ? (
             <div className="flex flex-col gap-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="card p-6 animate-pulse">
+                <div key={i} className="card-static p-5 animate-pulse">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/5" />
+                    <div className="w-10 h-10 bg-white/5" style={{ borderRadius: 'var(--radius)' }} />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 bg-white/5 rounded w-1/3" />
-                      <div className="h-3 bg-white/5 rounded w-1/4" />
+                      <div className="h-3 bg-white/5 w-1/3" />
+                      <div className="h-2.5 bg-white/5 w-1/4" />
                     </div>
                   </div>
                   <div className="mt-4 space-y-2">
-                    <div className="h-3 bg-white/5 rounded" />
-                    <div className="h-3 bg-white/5 rounded w-3/4" />
+                    <div className="h-3 bg-white/5" />
+                    <div className="h-3 bg-white/5 w-3/4" />
                   </div>
                 </div>
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <div className="card p-12 text-center">
-              <p className="text-base font-light mb-2" style={{ color: 'var(--text-secondary)' }}>No messages yet</p>
+            <div className="card-static p-12 text-center dot-grid-bg">
+              <p className="font-mono text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--ink-secondary)' }}>No messages yet</p>
               <p className="tag typing-cursor">Be the pioneer. Drop the first message.</p>
             </div>
           ) : (

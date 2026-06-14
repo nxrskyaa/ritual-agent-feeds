@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Loader2, Check, Send, Wallet, Terminal } from 'lucide-react'
+import { Loader2, Check, ArrowRight, Wallet } from 'lucide-react'
 import { useAgentFeed } from '@/hooks/useAgentFeed'
 import { FEED_PLACEHOLDERS, MAX_MESSAGE_LENGTH } from '@/lib/constants'
 import type { Toast, FeedEntry } from '@/types'
@@ -17,7 +17,6 @@ interface MessageComposerProps {
 
 export default function MessageComposer({
   walletConnected,
-  walletAddress,
   isConnecting,
   onSubmit,
   onToast,
@@ -25,6 +24,7 @@ export default function MessageComposer({
 }: MessageComposerProps) {
   const [message, setMessage] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
+  const [focused, setFocused] = useState(false)
   const { postMessage, isPosting } = useAgentFeed()
 
   const charCount = message.length
@@ -48,7 +48,6 @@ export default function MessageComposer({
 
   const handleSubmit = useCallback(async () => {
     if (!canSubmit) return
-
     try {
       const { hash, entry } = await postMessage(message.trim())
       onSubmit(entry)
@@ -61,17 +60,17 @@ export default function MessageComposer({
     }
   }, [canSubmit, message, postMessage, onSubmit, onToast])
 
+  const pct = Math.min((charCount / MAX_MESSAGE_LENGTH) * 100, 100)
+
   return (
-    <div className="card p-5 mb-6" style={{ border: '1px solid rgba(139,92,246,0.12)' }}>
+    <div className="card-static p-5 mb-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b" style={{ borderColor: 'var(--line)' }}>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(167,139,250,0.15))' }}>
-            <Terminal size={13} style={{ color: 'var(--violet)' }} />
-          </div>
-          <h3 className="font-heading text-sm font-semibold typing-cursor" style={{ color: 'var(--text)' }}>Compose</h3>
+          <span className="font-mono text-xs" style={{ color: 'var(--signal)' }}>{'>'}</span>
+          <h3 className="font-mono text-xs font-bold uppercase tracking-widest typing-cursor" style={{ color: 'var(--ink-display)' }}>Compose</h3>
         </div>
-        <span className="tag" style={{ color: isOverLimit ? 'var(--pink)' : 'var(--text-muted)' }}>
+        <span className="tag" style={{ color: isOverLimit ? 'var(--signal)' : 'var(--ink-tertiary)' }}>
           {charCount} / {MAX_MESSAGE_LENGTH}
         </span>
       </div>
@@ -79,52 +78,48 @@ export default function MessageComposer({
       {/* Textarea */}
       <div className="relative">
         {!message && (
-          <div
-            className="absolute top-3 left-4 pointer-events-none text-sm"
-            style={{ color: 'var(--text-muted)' }}
-          >
+          <div className="absolute top-3 left-3.5 pointer-events-none text-sm font-mono" style={{ color: 'var(--ink-disabled)' }}>
             {placeholder}
           </div>
         )}
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full min-h-[100px] rounded-xl p-3.5 text-sm resize-y focus:outline-none transition-colors duration-200"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className="w-full min-h-[100px] p-3.5 text-sm resize-y focus:outline-none transition-colors duration-200 font-mono"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            color: 'var(--text)',
-            border: `1px solid ${isOverLimit ? 'rgba(244,114,182,0.4)' : 'rgba(255,255,255,0.06)'}`,
-          }}
-          onFocus={(e) => {
-            if (!isOverLimit) e.currentTarget.style.borderColor = 'rgba(139,92,246,0.25)'
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = isOverLimit ? 'rgba(244,114,182,0.4)' : 'rgba(255,255,255,0.06)'
+            background: 'var(--surface-0)',
+            color: 'var(--ink-primary)',
+            borderRadius: 'var(--radius)',
+            border: `1px solid ${isOverLimit ? 'var(--signal)' : focused ? 'var(--ink-tertiary)' : 'var(--line-strong)'}`,
           }}
         />
       </div>
 
-      {/* Submit button */}
-      <div className="flex items-center justify-end mt-4">
+      {/* char meter */}
+      <div className="h-px w-full mt-3 mb-4" style={{ background: 'var(--line)' }}>
+        <div className="h-px transition-all duration-200" style={{ width: `${pct}%`, background: isOverLimit ? 'var(--signal)' : 'var(--ink-secondary)' }} />
+      </div>
+
+      {/* Submit */}
+      <div className="flex items-center justify-end">
         {!walletConnected ? (
-          <ParticleButton
-            onClick={handleConnectClick}
-            disabled={isConnecting}
-          >
+          <ParticleButton onClick={handleConnectClick} disabled={isConnecting}>
             {isConnecting ? (
-              <><Loader2 size={14} className="animate-spin" /> Connecting...</>
+              <><Loader2 size={14} className="animate-spin" /> CONNECTING…</>
             ) : (
-              <><Wallet size={14} className="btn-icon" /> Connect to Post</>
+              <><Wallet size={14} /> CONNECT TO POST</>
             )}
           </ParticleButton>
         ) : (
           <ParticleButton onClick={handleSubmit} disabled={!canSubmit}>
             {isPosting ? (
-              <><Loader2 size={14} className="animate-spin" /> Sending...</>
+              <><Loader2 size={14} className="animate-spin" /> SENDING…</>
             ) : showSuccess ? (
-              <><Check size={14} className="pop-check" /> Sent!</>
+              <><Check size={14} className="pop-check" /> SENT</>
             ) : (
-              <><Send size={14} className="btn-icon" /> Post Message</>
+              <>POST MESSAGE <ArrowRight size={14} /></>
             )}
           </ParticleButton>
         )}
